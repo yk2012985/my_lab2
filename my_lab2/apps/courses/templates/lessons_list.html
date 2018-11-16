@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>课程列表</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maxium-scale=1,minimum-
+      scale=1,user-scalable=no">
+     <link rel="stylesheet"
+     href="/static/css2/bootstrap.min.css">
+</head>
+<body>
+{% include "base2.html" %}
+<div class="row">
+        <div class="col-lg-4 col-lg-push-3">
+            {#<h2>共{{ course_number }}个</h2>两种方式都可以#}
+            <h2>共{{ lessons|length }}个</h2>
+            <h3><a href="{% url 'course:lesson_edit_page' 0 %}"  >添加实验课</a> </h3>
+        </div>
+        <div class="col-lg-8 col-lg-push-2">
+            {% if lessons %}
+                {% for lesson in lessons %}
+                {#   <h2><a href="/course_info/" course.id >{{ course.name }}</a></h2>#}
+                    <h2><a href="{% url 'course:lesson_info' lesson.id %}">{{ lesson.name }}</a></h2>
+                {% endfor %}
+            {% else %}
+                <h2>当前无实验课</h2>
+            {% endif %}
+        </div>
+
+</div>
+
+</body>
+</html>

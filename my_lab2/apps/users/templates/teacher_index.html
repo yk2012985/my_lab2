@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>教师主页</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1, maxium-scale=1,minimum-
+      scale=1,user-scalable=no">
+     <link rel="stylesheet"
+     href="/static/css2/bootstrap.min.css">
+</head>
+<body>
+<h2>欢迎，{{ request.user.username }}</h2>
+{% include "base2.html" %}
+<div class="col-lg-4 col-lg-push-3">
+{#    <h2>我的班级</h2>#}
+{#    {% for class in banji %}#}
+{#        <h3>{{ class.name }}</h3>#}
+{#    {% endfor %}#}
+{#    <h2><a href="/report/">实验报告</a> </h2>#}
+    {% for lesson in lessons %}
+        <h3>{{ lesson.lesson.title }}</h3>
+        <h4>开始时间：{{ lesson.start_time }}</h4>
+        <h4>结束时间：{{ lesson.stop_time }}</h4>
+        <h4>实验地点：{{ lesson.lab.name }}</h4>
+        <h4>发布时间：{{ lesson.add_time }}</h4>
+    {% endfor %}
+</div>
+</body>
+</html>

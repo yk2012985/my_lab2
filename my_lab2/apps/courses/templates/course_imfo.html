@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>课程详情</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1, maxium-scale=1, minimum-
+      scale=1,user-scalable=no">
+     <link rel="stylesheet"
+     href="/static/css2/bootstrap.min.css">
+</head>
+<body>
+{% include 'base2.html' %}
+{#<div class="col-lg-4 col-lg-push-3">#}
+<div class="col-lg-4">
+    <h1>{{ course.name }}</h1>
+    <h2>课程描述：{{ course.desc }}</h2>
+    <h2>课程说明：{{ course.detail }}</h2>
+    <h2>添加时间：{{ course.add_time }}</h2>
+    <h3><a href="{% url 'course:lesson_edit_page' course.id 0 %}">添加实验</a> </h3>
+{#    <h3><a href="{% url 'course:upload_file_page' course.id %}">上传科目资料</a> </h3>#}
+    <h3><a href="{% url 'course:course_edit_page' course.id %}">课程编辑</a></h3>
+    <h3><a href="{% url 'course:course_delete' course.id %}">删除课程</a></h3>
+</div>
+{#<div class="col-lg-8 col-lg-push-4">#}
+<div class="col-lg-4">
+    <h2>本课程实验</h2>
+    {#{% if lessons %}#}
+    {#    {% for lesson in lessons %}#}
+    {#        <h2><a href="{% url 'lesson_info' lesson.id %}">{{ lesson.name }}</a></h2>#}
+    {#    {% endfor %}#}
+    {#{% else %}#}
+    {#    <h2>当前科目无实验课</h2>#}
+    {#{% endif %}#}
+    {#两种方式口可以#}
+    {% for lesson in lessons %}
+        <h2><a href="{% url 'course:lesson_info' lesson.id %}">{{ lesson.name }}</a></h2>
+    {% empty %}
+        <h2>当前科目无实验课</h2>
+    {% endfor %}
+</div>
+<div class="col-lg-4">
+  <h2>本课程资料</h2>
+    {% for file in files %}
+        <h3><a href="{% url 'course:course_file_context' file.id %}">{{ file.name }}</a></h3>
+{#        <h3>{{ file.name }}</h3>#}
+    {% endfor %}
+
+
+
+
+</body>
+</html>

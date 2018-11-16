@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>课程列表</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maxium-scale=1,minimum-
+      scale=1,user-scalable=no">
+     <link rel="stylesheet" href="/static/css2/bootstrap.min.css">
+    <script src="/static/js/jquery-1.11.3.js"></script>
+</head>
+<body>
+{% include "base2.html" %}
+<div class="row">
+        <div class="col-lg-4 col-lg-push-3">
+            {#<h2>共{{ course_number }}个</h2>两种方式都可以#}
+            <h2>共{{ lessons_personal|length }}个</h2>
+        </div>
+        <div class="col-lg-8 col-lg-push-2">
+            {% if lessons_personal %}
+                <h2>已选择实验课：</h2>
+                {% for lesson in lessons_personal %}
+                {#   <h2><a href="/course_info/" course.id >{{ course.name }}</a></h2>#}
+                    <h2 ><a name="personal_class" href="{% url 'course:lesson_info' lesson.id %}">{{ lesson.name }}</a></h2>
+                    <h3><a href="{% url 'course:lesson_cancel_select' lesson.id %}">退选</a> </h3>
+                {% endfor %}
+            {% else %}
+                <h2>当前无实验课</h2>
+            {% endif %}
+        </div>
+
+
+</div>
+<script>
+    'use strict'
+    function get_class() {
+        var personal_class2 = [];
+        var personal_class1 = $('[name=personal_class]');
+        var personal_class2 = [];
+        personal_class1.each(function () {
+           personal_class2.push($(this).text())
+        });
+        window.external.get_personal_lessons( personal_class2);
+        // personal_class1.each(function () {
+            //personal_class2.push($(this).text());
+           // console.log($(this).text());
+       //  })
+        //window.external.Test(personal_class2);
+
+    };
+
+
+    //$(document).on('ready',function () {
+        //var personal_class1 = $('[name=personal_class]');
+
+        //var personal_class2 = [];
+
+
+
+       //personal_class1.each(function () {
+          // personal_class2.push($(this).text());
+
+      // });
+      // for(var i=0;i<personal_class2.length;i++)
+      // {
+       //    console.log(personal_class2[i]);
+      // }
+      // window.external.Test(personal_class2);
+    //});
+
+
+
+
+</script>
+</body>
+</html>

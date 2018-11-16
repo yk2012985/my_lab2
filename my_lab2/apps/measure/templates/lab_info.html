@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>实验室详情</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maxium-scale=1,minimum-
+      scale=1,user-scalable=no">
+     <link rel="stylesheet"
+     href="/static/css2/bootstrap.min.css">
+</head>
+<body>
+{% include 'base2.html' %}
+<div class="col-lg-3 col-lg-push-3">
+    <h1>{{ lab.name }}</h1>
+    <h2>实验室位置：{{ lab.locate }}</h2>
+    <h2>管理员：{{ lab.admin }}</h2>
+    <h2>实验室介绍：{{ lab.detail }}</h2>
+    <h2>开放时间：{{ lab.open_start }}</h2>
+    <h2>结束时间：{{ lab.open_stop }}</h2>
+    <h2>添加时间：{{ lab.add_time }}</h2>
+    <h2><a href="{% url 'lab:lab_edit_page'  0 %}">添加实验室</a> </h2>
+    <h2><a href="{% url 'lab:lab_edit_page' lab.id %}">实验室编辑</a></h2>
+    <h2><a href="{% url 'lab:lab_delete' lab.id %}">删除实验室</a></h2>
+</div>
+<div class="col-lg-9 col-lg-push-4">
+    <h2>实验室仪器</h2>
+        {% for foo in devices %}
+            <h2><a href="{% url 'lab:device_info' foo.id  %}">{{ foo.name }}</a></h2>
+        {% empty %}
+            <h2>当前实验室无仪器</h2>
+        {% endfor %}
+
+{#     <h3><a href="{% url 'lab:device_edit_page' 0 lab.id  %}">添加仪器</a></h3>#}
+
+    {#两种方式口可以#}
+{#    {% for lesson in lessons %}#}
+{#        <h2><a href="{% url 'lesson_info' lesson.id %}">{{ lesson.name }}</a></h2>#}
+{#    {% empty %}#}
+{#        <h2>当前科目无实验课</h2>#}
+{#    {% endfor %}#}
+</div>
+<div class="col-lg-9 col-lg-push-4">
+    <h2>该实验室实验有：</h2>
+    {% for lesson in lessons %}
+    <h2><a href="{% url 'course:lesson_info' lesson.id %}">{{ lesson.name }}</a> </h2>
+    {% endfor %}
+
+</div>
+</body>
+</html>

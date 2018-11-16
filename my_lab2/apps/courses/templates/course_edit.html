@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>课程编辑</title>
+    <link rel="stylesheet"
+     href="/static/css2/bootstrap.min.css">
+</head>
+<body>
+{% include 'base2.html' %}
+    <div class="container">
+            {% for message in messages %}
+               <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+    </div>
+    <form method="post" action="/course/course_edit_action/" autocomplete="off">
+      <input type="hidden" name="course_id" value="{{course.id|default:'0'}}">
+        <div>
+            <label>课程名称</label>
+            <input type="text" class="form-control" name="name" value="{{ course.name }}">
+        </div>
+        <div>
+             <label>课程说明</label>
+{#            <input type="text" class="form-control" name="detail" value="{{ course.detail }}">#}
+            <textarea name="detail" rows="3" cols="70" class="form-control" placeholder="必填"  >{{ course.detail }}</textarea>
+        </div>
+{#        <table class="form-control">#}
+{#            {{ courseform.as_table }}#}
+{#        </table>#}
+        <input type="submit" value="提交 > " />
+        <input type="reset" value="清除重填" />
+     </form>
+</body>
+</html>

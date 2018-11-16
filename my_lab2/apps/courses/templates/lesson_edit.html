@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>实验编辑</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maxium-scale=1,minimum-
+      scale=1,user-scalable=no">
+     <link rel="stylesheet"
+     href="/static/css2/bootstrap.min.css">
+{#    <link rel="stylesheet" href="/static/css2/style.css">#}
+</head>
+<body>
+{% include 'base2.html' %}
+    <div class="container">
+            {% for message in messages %}
+               <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+    </div>
+{#<form method="post" action="/course:lesson_edit_action/" autocomplete="off">#}
+<form method="post" action="/course/lesson_edit_action/" autocomplete="off">
+      <input type="hidden" name="lesson_id" value="{{lesson.id|default:'0'}}">
+{#      <input type="hidden" name="course_id" value="{{course.id|default:'1'}}">#}
+        <div class="form-group">
+{#            这是一个下拉式菜单，选择实验的所属科目#}
+            <label for="course">所属科目：</label>
+            <select class="form-control" name="course">
+                {% for foo in courses %}
+                    <option value="{{ foo.id }}">{{ foo.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+         <div class="form-group">
+        {#            这是一个下拉式菜单，选择实验的所属实验室#}
+                    <label for="lab">所在实验室：</label>
+{#                    <select class="form-control" name="labs">#}
+{#                        {% for foo in labs %}#}
+{#                            <option value="{{ foo.id }}">{{ foo.name }}</option>#}
+{#                        {% endfor %}#}
+{#                    </select>#}
+             {% for lab in labs %}
+                 <input type="checkbox" name="lab_ids" value="{{ lab.id }}"/>{{ lab.name }}
+             {% endfor %}
+         </div>
+{#    另一种添加实验的思路：在实验编辑页面加一个科目选择框，用来选择所属科目；科目信息页面不传科目id来编辑页面，科目id在编辑页面里选择，问题是下拉菜单的参数如何传输#}
+        <div>
+            <label>实验名称</label>
+            <input type="text" class="form-control" name="name" value="{{ lesson.name }}" placeholder="必填">
+        </div>
+        <div>
+            <label>实验要求</label>
+{#            <input type="text" name="detail" value="{{ lesson.detail }}" placeholder="必填">#}
+            <textarea name="detail" rows="3" cols="70" class="form-control" placeholder="必填"  >{{ lesson.detail }}</textarea>
+{#            textarea没有value#}
+        </div>
+        <div>
+            <label>实验教师</label>
+            <input type="text" class="form-control" name="teacher" value="{{ lesson.teacher }}" placeholder="必填">
+        </div>
+        <div class="form-group">
+{#            这是一个下拉式菜单，选择实验的开始时间#}
+            <label for="lesson_start">开始时间：</label>
+            <select class="form-control" name="start_year">
+{#                {% for foo in courses %}#}
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+{#                {% endfor %}#}
+            </select>
+            <select class="form-control" name="start_month">
+{#                {% for foo in courses %}#}
+                    <option value="1">一月</option>
+                    <option value="2">二月</option>
+                    <option value="3">三月</option>
+                    <option value="4">四月</option>
+                    <option value="5">五月</option>
+                    <option value="6">六月</option>
+                    <option value="7">七月</option>
+                    <option value="8">八月</option>
+                    <option value="9">九月</option>
+                    <option value="10">十月</option>
+                    <option value="11">十一月</option>
+                    <option value="12">十二月</option>
+{#                {% endfor %}#}
+            </select>
+            <select class="form-control" name="start_day">
+{#                {% for foo in courses %}#}
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                    <option value="31">31</option>
+{#                {% endfor %}#}
+            </select>
+            <select class="form-control" name="start_hour">
+{#                {% for foo in courses %}#}
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+{#                {% endfor %}#}
+            </select>
+            <select class="form-control" name="start_min">
+{#                {% for foo in courses %}#}
+                    <option value="0">00</option>
+                    <option value="30">30</option>
+{#                {% endfor %}#}
+            </select>
+        </div>
+<div class="form-group">
+{#            这是一个下拉式菜单，选择实验的开始时间#}
+            <label for="lesson_start">结束时间：</label>
+{#            <select class="form-control" name="stop_year">#}
+{#                {% for foo in courses %}#}
+{#                    <option value="2018">2018</option>#}
+{#                    <option value="2019">2019</option>#}
+{#                {% endfor %}#}
+{#            </select>#}
+{#            <select class="form-control" name="stop_month">#}
+{#                {% for foo in courses %}#}
+{#                    <option value="1">一月</option>#}
+{#                    <option value="2">二月</option>#}
+{#                    <option value="3">三月</option>#}
+{#                    <option value="4">四月</option>#}
+{#                    <option value="5">五月</option>#}
+{#                    <option value="6">六月</option>#}
+{#                    <option value="7">七月</option>#}
+{#                    <option value="8">八月</option>#}
+{#                    <option value="9">九月</option>#}
+{#                    <option value="10">十月</option>#}
+{#                    <option value="11">十一月</option>#}
+{#                    <option value="12">十二月</option>#}
+{#                {% endfor %}#}
+{#            </select>#}
+{#            <select class="form-control" name="stop_day">#}
+{#                {% for foo in courses %}#}
+{#                    <option value="1">1</option>#}
+{#                    <option value="2">2</option>#}
+{#                    <option value="3">3</option>#}
+{#                    <option value="4">4</option>#}
+{#                    <option value="5">5</option>#}
+{#                    <option value="6">6</option>#}
+{#                    <option value="7">7</option>#}
+{#                    <option value="8">8</option>#}
+{#                    <option value="9">9</option>#}
+{#                    <option value="10">10</option>#}
+{#                    <option value="11">11</option>#}
+{#                    <option value="12">12</option>#}
+{#                    <option value="13">13</option>#}
+{#                    <option value="14">14</option>#}
+{#                    <option value="15">15</option>#}
+{#                    <option value="16">16</option>#}
+{#                    <option value="17">17</option>#}
+{#                    <option value="18">18</option>#}
+{#                    <option value="19">19</option>#}
+{#                    <option value="20">20</option>#}
+{#                    <option value="21">21</option>#}
+{#                    <option value="22">22</option>#}
+{#                    <option value="23">23</option>#}
+{#                    <option value="24">24</option>#}
+{#                    <option value="25">25</option>#}
+{#                    <option value="26">26</option>#}
+{#                    <option value="27">27</option>#}
+{#                    <option value="28">28</option>#}
+{#                    <option value="29">29</option>#}
+{#                    <option value="30">30</option>#}
+{#                    <option value="31">31</option>#}
+{#                {% endfor %}#}
+{#            </select>#}
+            <select class="form-control" name="stop_hour">
+{#                {% for foo in courses %}#}
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+{#                {% endfor %}#}
+            </select>
+            <select class="form-control" name="stop_min">
+{#                {% for foo in courses %}#}
+                    <option value="0">00</option>
+                    <option value="30">30</option>
+{#                {% endfor %}#}
+            </select>
+        </div>
+        <input type="submit" class="btn btn-primary " value="提交 > " />
+        <input type="reset" class="btn btn-danger " value="清除重填" />
+     </form>
+
+
+
+</body>
+</html>
