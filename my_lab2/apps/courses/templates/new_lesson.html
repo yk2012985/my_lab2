@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>实验添加</title>
+</head>
+<body>
+<form action="{% url 'course:new_lesson_submit' %}" method="post" autocomplete="off">
+    {% if msg %}<h2>{{ msg }}</h2>{% endif %}
+   <div>
+       <h2>实验课信息</h2>
+       {{ lesson_form }}
+   </div>
+
+
+    <input class="btn" type="submit" value="发布实验">
+</form>
+
+
+</body>
+</html>
