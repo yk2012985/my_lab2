@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import render
+from opertion.models import LessonPublic
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic.base import View
 from .models import UserProfile
@@ -48,7 +49,7 @@ class LoginView(View):  # 我们在这里重构Django的View类，重写get和po
                     login(request, user)
                     user = UserProfile.objects.get(username=user_name)
                     if user.type=="teacher":
-                        return HttpResponseRedirect(reverse("course:teacher_index"))
+                        return HttpResponseRedirect(reverse("teacher_index"))
                     elif user.type=="student":
                         return render(request, "index2.html", {
 
@@ -77,12 +78,24 @@ def log_out(request):  # 使用删除session的方式实现注销
 
 
 
-def teacher_index(request):
-    return render(request, 'users/templates/teacher_index.html')
+class TeacherIndexView(View):
+    """
+    教师首页
+    """
+    def get(self, request):
+        # courses = Course.objects.all()
+        name = request.user.username
+        # teacher = UserProfile.objects.get(user=request.user)
+        lesson_public = LessonPublic.objects.filter(teacher=request.user)
+        lessons = []  # 用于装发布的lesson
+        for lesson in lesson_public:
+            lessons.append(lesson.lesson)
+        return render(request, 'teacher_index.html', {
+            'lessons': lesson_public
+        })
 
 
-
-def student_index(request):
-    return render(request, 'users/templates/student_index.html')
+class StudentIndexView(View):
+    pass
 
 

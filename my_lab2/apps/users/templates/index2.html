@@ -10,6 +10,8 @@
 {#    <link rel="stylesheet"#}
 {#     href="/static/css2/bootstrap.min.css">这是原来的，无法载入图片#}
     <link rel="stylesheet" type="text/css" href="{% static 'css2/bootstrap.min.css' %}"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1, maxium-scale=1,minimum-
+      scale=1,user-scalable=no">
     <script src="/static/js/jquery-1.11.3.js"></script>
 {#    这个是参考Django文档写的，也无法载入图片#}
 </head>
@@ -35,7 +37,7 @@
 
     <ul class="nav navbar-default">
         <ul>
-           <h2 style="text-align: center;"><a href="/teacher_index/">教师主页</a></h2>
+           <h2 style="text-align: center;"><a href="{% url 'course:teacher_index' %}">教师主页</a></h2>
            <h2 style="text-align: center;"><a href="/student_index/">学生主页</a></h2>
            <h2 style="text-align: center;"><a href="{% url 'lab:labs' %}">设备管理</a></h2>
            <h2 style="text-align: center;">资源共享</h2>

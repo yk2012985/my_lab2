@@ -5,20 +5,16 @@
     <title>实验发布</title>
 </head>
 <body>
-<form action="{% url 'course:lesson_public_submit' %}" method="post" autocomplete="off">
+{% include 'base2.html' %}
+<form action="{% url 'operation:lesson_public_submit' %}" method="post" autocomplete="off">
     {% if msg %}<h2>{{ msg }}</h2>{% endif %}
-   <div>
-       <h2>实验课信息</h2>
-       {{ lesson_form }}
-   </div>
     <div>
         <h2>实验课发布信息</h2>
         {{ lesson_public_form }}
     </div>
-
+    <input type="hidden" name="lesson_id" value="{{lesson_public_id|default:'0'}}">
     <input class="btn" type="submit" value="发布实验">
 </form>
-
 
 </body>
 </html>

@@ -1,8 +1,65 @@
 from django.conf.urls import url
-from .views import TeacherIndexView, LessonPublicView, LessonPublicSubmitView
+from .views import LessonAddView, LessonAddSubmitView
 urlpatterns = [
-    url(r'^teacher/index', TeacherIndexView.as_view(), name='teacher_index'),
-    url(r'^lesson/public', LessonPublicView.as_view(), name='lesson_public'),
-    url(r'^add_lesson_public/', LessonPublicSubmitView.as_view(), name='lesson_public_submit'),
+
+    url(r'^lesson_add$', LessonAddView.as_view(), name='lesson_add'),
+
+    url(r'^lesson/add_submit', LessonAddSubmitView.as_view(), name='lesson_add_submit'),
+
 
 ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

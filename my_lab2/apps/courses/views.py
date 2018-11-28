@@ -14,74 +14,100 @@ from datetime import datetime
 # Create your views here.
 
 
-class TeacherIndexView(View):
+class LessonAddView(View):
     """
-    教师首页
-    """
-    def get(self, request):
-        # courses = Course.objects.all()
-        name = request.user.username
-        # teacher = UserProfile.objects.get(user=request.user)
-        lesson_public = LessonPublic.objects.filter(teacher=request.user)
-        lessons = []  # 用于装发布的lesson
-        for lesson in lesson_public:
-            lessons.append(lesson.lesson)
-        return render(request, 'teacher_index.html', {
-            'lessons': lesson_public
-        })
-
-
-class LessonPublicView(View):
-    """
-    实验发布函数
+    添加新的实验课
     """
     def get(self, request):
         lesson_form = LessonForm()
-        lesson_public_form = LessonPublicForm()
-        return render(request, 'lesson_public.html', {
-            'lesson_form': lesson_form,
-            'lesson_public_form': lesson_public_form
+        return render(request, 'new_lesson.html', {
+            'lesson_form': lesson_form
         })
 
 
-class LessonPublicSubmitView(View):
+class LessonAddSubmitView(View):
     """
-    实验发布处理函数
+    处理提交的新的实验课表单
     """
-    def get(self, rquest):
-        return render(rquest, "login2.html")
+    def get(self, request):
+        return render(request, "login2.html")
 
     def post(self, request):
+        lesson_id = request.POST.get('lesson_id', '0')
         lesson_form = LessonForm(request.POST)
-        lesson_public_form = LessonPublicForm(request.POST)
         if lesson_form.is_valid():
-            lesson = lesson_form.save(commit=True)
-
-            if lesson_public_form.is_valid():
-                lesson_public = LessonPublic()
-                lesson_public.teacher = request.user  # 先判定用户已登陆
-                lesson_public.lesson = lesson
-                lesson_public.lab = lesson_public_form.lab
-                lesson_public.start_time = lesson_public_form.start_time
-                lesson_public.stop_time = lesson_public_form.stop_time
-                lesson_public.add_time = datetime.now
-                lesson_public.save()
-                return HttpResponseRedirect(reverse('teacher_index'))
+            if lesson_id == '0':
+                lesson_form.save(commit=True)
+                return HttpResponseRedirect(reverse("teacher_index"))
             else:
-                return render(request, 'lesson_public.html', {
-                    'lesson_form': lesson_form,
-                    'lesson_public_form': lesson_public_form,
-                    'msg': "实验课发布信息填充有误，请重新填写"
-                })
+                lesson = Lesson.objects.get(id=lesson_id)
+                LessonForm(request.POST, instance=lesson).save()  # 直接在旧的基础上保存
+                return HttpResponseRedirect(reverse("teacher_index"))
 
         else:
-            return render(request, 'lesson_public.html', {
+            return render(request, 'new_lesson.html', {
                 'lesson_form': lesson_form,
-                'lesson_public_form': lesson_public_form,
                 'msg': "实验课信息填充有误，请重新填写"
             })
 
 
+
+
+
+
+# class LessonPublicEditView(View):
+#     """
+#     修改发布实验课页
+#     """
+#     def get(self, request, lesson_id):
+#         lesson_public = LessonPublic.objects.get(id=lesson_id)
+#         lesson = lesson_public.lesson
+#         lesson_public_form = LessonPublicForm(instance=lesson_public)
+#         lesson_form = LessonForm(instance=lesson)
+#         return render(request, 'lesson_public.html', {
+#             'lesson_form': lesson_form,
+#             'lesson_public_form': lesson_public_form,
+#             'lesson_id': lesson_public.id
+#         })
+#
+#
+# class LessonPublicEditSubmitView(View):
+#     """
+#     实验发布处理函数
+#     """
+#     def get(self, rquest):
+#         return render(rquest, "login2.html")
+#
+#     def post(self, request):
+#         lesson_form = LessonForm(request.POST)
+#         lesson_public_form = LessonPublicForm(request.POST)
+#         if lesson_form.is_valid():
+#             lesson = Lesson.objects.get(title=lesson_form.title)
+#
+#
+#             if lesson_public_form.is_valid():
+#                 lesson_public = LessonPublic()
+#                 lesson_public.teacher = request.user  # 先判定用户已登陆
+#                 lesson_public.lesson = lesson
+#                 lesson_public.lab = lesson_public_form.lab
+#                 lesson_public.start_time = lesson_public_form.start_time
+#                 lesson_public.stop_time = lesson_public_form.stop_time
+#                 lesson_public.add_time = datetime.now
+#                 lesson_public.save()
+#                 return HttpResponseRedirect(reverse('course:teacher_index'))
+#             else:
+#                 return render(request, 'lesson_public.html', {
+#                     'lesson_form': lesson_form,
+#                     'lesson_public_form': lesson_public_form,
+#                     'msg': "实验课发布信息填充有误，请重新填写"
+#                 })
+#
+#         else:
+#             return render(request, 'lesson_public.html', {
+#                 'lesson_form': lesson_form,
+#                 'lesson_public_form': lesson_public_form,
+#                 'msg': "实验课信息填充有误，请重新填写"
+#             })
 
 
 

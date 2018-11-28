@@ -11,13 +11,13 @@ from opertion.models import LessonPublic
 class LessonForm(forms.ModelForm):
     class Meta:
         model = Lesson
-        fields = ['title', 'detail', 'course','template']
+        fields = '__all__'
 
 
 class LessonPublicForm(forms.ModelForm):
     class Meta:
         model = LessonPublic
-        fields = ['lab', 'start_time', 'stop_time']
+        fields = '__all__'
 
 #
 #

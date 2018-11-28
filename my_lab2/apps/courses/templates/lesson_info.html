@@ -10,37 +10,40 @@
 </head>
 <body>
 {% include 'base2.html' %}
-<div class="col-lg-4 col-lg-push-3">
-    {% if teacher %}
-        <h2><a href="{% url 'course:lesson_edit_page' course.id 0 %}">添加实验</a></h2>
-        <h2><a href="{% url 'course:lesson_delete' course.id lesson.id %}">删除实验</a></h2>
-        <h2><a href="{% url 'course:lesson_edit_page' course.id lesson.id %}">实验课编辑</a></h2>
-        <h2>添加时间：{{ lesson.add_time }}</h2>
-    {% endif %}
-</div>
+{#<div class="col-lg-4 col-lg-push-3">#}
+{#    {% if teacher %}#}
+{#        <h2><a href="{% url 'course:lesson_edit_page' course.id 0 %}">添加实验</a></h2>#}
+{#        <h2><a href="{% url 'course:lesson_delete' course.id lesson.id %}">删除实验</a></h2>#}
+{#        <h2><a href="{% url 'course:lesson_edit_page' course.id lesson.id %}">实验课编辑</a></h2>#}
+{#        <h2>添加时间：{{ lesson.add_time }}</h2>#}
+{#    {% endif %}#}
+{#</div>#}
 <div class="col-lg-8 col-lg-push-2">
-    <h1>{{ lesson.name }}</h1>
-    <h2>实验要求：{{ lesson.detail }}</h2>
-    <h2>实验开始时间：{{ lesson.lesson_start }}</h2>
-    <h2>实验结束时间：{{ lesson.lesson_stop }}</h2>
-    <h2>指导教师：{{ lesson.teacher }}</h2>
-    <h2>实验教室:
-    {% for lab in labs %}
-        <a href="{% url 'lab:lab_info' lab.id %}">{{ lab.name }}</a></h2>
-    {% endfor %}
+    <h1>{{ lesson.lesson.title }}</h1>
+
+    <h2>实验开始时间：{{ lesson.start_time }}</h2>
+    <h2>实验结束时间：{{ lesson.stop_time }}</h2>
+    <h2>指导教师：{{ request.user.username }}</h2>
+    <h2>实验教室:{{ lesson.lab.name }}</h2>
+    <span><i class="aui-iconfont aui-icon-file"></i>{{ lesson.lesson.title }} </span>
+    <h2><a href="{{ MEDIA_URL }}{{ lesson.lesson.template }}" class="downcode" target="_blank" download="" data-id="274" title="">模板下载</a></h2>
+    <h2><a href="{% url 'operation:lesson_edit' lesson.id %}">修改</a> </h2>
+{#    {% for lab in labs %}#}
+{#        <a href="{% url 'lab:lab_info' lab.id %}">{{ lab.name }}</a></h2>#}
+{#    {% endfor %}#}
 </div>
-<div>
-    {% if student %}
-        <h2><a href="{% url 'course:lesson_select' lesson.id %}" >选定</a></h2>
-    {% endif %}
-</div>
-<div>
-    {% if teacher %}
-        <h2>选该实验课的学生：</h2>
-        {% for student in students %}
-        <h2>{{ student.username }}</h2>
-        {% endfor %}
-    {% endif %}
-</div>
+{#<div>#}
+{#    {% if student %}#}
+{#        <h2><a href="{% url 'course:lesson_select' lesson.id %}" >选定</a></h2>#}
+{#    {% endif %}#}
+{#</div>#}
+{#<div>#}
+{#    {% if teacher %}#}
+{#        <h2>选该实验课的学生：</h2>#}
+{#        {% for student in students %}#}
+{#        <h2>{{ student.username }}</h2>#}
+{#        {% endfor %}#}
+{#    {% endif %}#}
+{#</div>#}
 </body>
 </html>
