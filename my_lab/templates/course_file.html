@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>科目资料</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1, maxium-scale=1, minimum-
+      scale=1,user-scalable=no">
+     <link rel="stylesheet"
+     href="/static/css2/bootstrap.min.css">
+</head>
+<body>
+{% include 'base2.html' %}
+<div class="container">
+        {% for message in messages %}
+           <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+</div>
+{#{{ context }}#}
+<div>
+    {% for line in lines %}
+        <p>{{ line }}</p>
+    {% endfor %}
+</div>
+<div>
+    <h3><a href="{% url 'course:course_file_download' file.id  %}" download="电工实验一.txt">下载文件</a></h3>
+</div>
+</body>
+</html>

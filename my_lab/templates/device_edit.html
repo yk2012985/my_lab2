@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>仪器信息编辑</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maxium-scale=1,minimum-
+      scale=1,user-scalable=no">
+     <link rel="stylesheet"
+     href="/static/css2/bootstrap.min.css">
+</head>
+<body>
+{% include 'base2.html' %}
+<div>
+    {% if msg %}
+    <div class="alert alert-warning">{{ msg }}</div>
+{% endif %}
+</div >
+<div class="col-lg-12">
+<form method="post" action="/lab/device_edit_action/" autocomplete="off">
+      <input type="hidden" name="device_id" value="{{device.id|default:'0'}}">
+      <input type="hidden" name="lab_id" value="{{lab.id|default:'1'}}">
+        <div class="form-group">
+{#            这是一个下拉式菜单，选择实验的所属科目#}
+            <label for="labs">所属实验室：</label>
+            <select class="form-control" name="labs">
+                {% for foo in labs %}
+                    <option value="{{ foo.id }}">{{ foo.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+{#    另一种添加实验的思路：在实验编辑页面加一个科目选择框，用来选择所属科目；科目信息页面不传科目id来编辑页面，科目id在编辑页面里选择，问题是下拉菜单的参数如何传输#}
+        <div>
+            <label>仪器名称</label>
+            <input type="text" class="form-control" name="name" value="{{ device.name }}" placeholder="必填">
+        </div>
+        <div>
+            <label>仪器类别</label>
+            <input type="text" name="kind" value="{{ device.kind }}" placeholder="必填">
+{#            <textarea name="detail" rows="3" cols="70" class="form-control" placeholder="必填" ></textarea>#}
+{#            textarea没有value#}
+        </div>
+        <div>
+            <label>仪器品牌</label>
+            <input type="text" class="form-control" name="brand" value="{{ device.brand }}" placeholder="必填">
+        </div>
+        <div>
+            <label>仪器说明</label>
+            <textarea name="detail" rows="3" cols="70" class="form-control" placeholder="必填" ></textarea>
+{#            textarea没有value#}
+        </div>
+        <input type="submit" class="btn btn-primary " value="提交 > " />
+        <input type="reset" class="btn btn-danger " value="清除重填" />
+     </form>
+</div>
+</body>
+
+</html>

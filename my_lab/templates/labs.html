@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>设备管理</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maxium-scale=1,minimum-
+      scale=1,user-scalable=no">
+     <link rel="stylesheet"
+     href="/static/css2/bootstrap.min.css">
+</head>
+<body>
+    {% include "base2.html" %}
+<div class="row">
+        <div class="col-lg-4 col-lg-push-3">
+            {% if labs %}
+                {% for lab in labs %}
+                    <h3><a href="{% url 'lab:lab_info' lab.id %}"  >{{ lab.name }}</a> </h3>
+                {% endfor %}
+            {% else %}
+                <h2>当前无实验室</h2>
+            {% endif %}
+             <h3><a href="{% url 'lab:lab_edit_page' 0 %}"  >添加实验室</a> </h3>
+        </div>
+        <div class="col-lg-8 col-lg-push-2">
+
+        </div>
+
+</div>
+</body>
+</html>

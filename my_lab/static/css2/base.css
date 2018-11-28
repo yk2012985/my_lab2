@@ -1,0 +1,43 @@
+header h1,h4{
+    font-family: sans-serif,bold,Calibri;
+    max-width:1000px;
+    margin-left: auto;
+    margin-right: auto;
+
+    font-style:italic;
+    font-weight: 800;
+    text-align: center;
+    font-variant: common-ligatures;
+}
+
+h1,h2{
+    font-family: sans-serif,David,Ebrima;
+    font-style: normal;
+    /*background:#909b9e;*/
+    /*width: auto;*/
+    /*display: block;*/
+    /*width: 1360px;!*设置元素的宽度*!*/
+    letter-spacing: 7px;
+    text-align: center;
+    /*text-shadow: 5px 3px 2px black;*/
+}
+a:link{
+    color: #2a2c2e;
+    text-decoration: none;
+}
+a:visited {
+    color: #d71200;
+}
+a:hover{
+    color: #00a0e9;
+    text-decoration: underline;
+}
+img{
+    /*border: 3px solid royalblue;*/
+    margin: 1366px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 0;
+    margin-top: 0;
+    text-align: center;
+}

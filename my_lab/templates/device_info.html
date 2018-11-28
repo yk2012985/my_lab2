@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>仪器详情</title>
+    <meta charset="UTF-8">
+    <title>实验编辑</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maxium-scale=1,minimum-
+      scale=1,user-scalable=no">
+     <link rel="stylesheet"
+     href="/static/css2/bootstrap.min.css">
+</head>
+<body>
+    {% include 'base2.html' %}
+    <div class="row">
+        <div class="col-lg-4 col-lg-push-3">
+            {% if device %}
+                    <h3>名称：{{ device.name }}</h3>
+                    <h3>所在实验室：{{ device.laboratory }}</h3>
+                    <h3>品牌：{{ device.brand }}</h3>
+                    <h3>添置时间：{{ device.add_time }}</h3>
+                    <h3>仪器说明：{{ device.detail }}</h3>
+            {% else %}
+                <h2>当前无设备信息</h2>
+            {% endif %}
+{#             <h3><a href="{% url 'lab_edit_page' 0 %}"  >添加实验室</a> </h3>#}
+        </div>
+        <div class="col-lg-8 col-lg-push-2">
+
+        </div>
+
+</div>
+</body>
+</html>

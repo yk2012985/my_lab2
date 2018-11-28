@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>实验报告</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maxium-scale=1,minimum-
+      scale=1,user-scalable=no">
+     <link rel="stylesheet"
+     href="/static/css2/bootstrap.min.css">
+</head>
+<body>
+{% include 'base2.html' %}
+
+{% for foo in muban %}
+    <h3>{{ foo.title }}</h3>
+    <h3>{{ foo.content }}</h3>
+{% endfor %}
+{#<div class="col-lg-4 col-lg-push-2">#}
+<div style="text-align: center;">
+    <h2>模板范例</h2>
+    <img src="/static/images2/1.jpg"/>
+    <img src="/static/images2/2.jpg"/>
+    <img src="/static/images2/3.jpg"/>
+    <img src="/static/images2/4.jpg"/>
+
+
+</div>
+</body>
+</html>

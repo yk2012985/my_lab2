@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>实验系统首页</title>
+    <link rel="stylesheet"
+     href="/static/css2/bootstrap.min.css">
+</head>
+<body>
+<header role="banner">
+    <div style="text-align: center;">
+        <img src="/static/images2/logo.jpg"/>
+    </div>
+
+    <h1 class="text-center">南京理工大学实验管理系统</h1>
+    <div class="container">
+        {% for message in messages %}
+           <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% if username %}
+        <h4 class="text-center">欢迎，{{ username }}</h4>
+        <h4 class="text-center"><a href="logout">注销</a></h4>
+    {% else %}
+         <h2 class="text-center"><a href="/login/">登陆</a></h2>
+    {% endif %}
+
+    <ul class="nav navbar-default">
+        <ul>
+           <h2 style="text-align: center;"><a href="/teacher_index/">教师主页</a></h2>
+           <h2 style="text-align: center;"><a href="/student_index/">学生主页</a></h2>
+           <h2 style="text-align: center;"><a href="{% url 'lab:labs' %}">设备管理</a></h2>
+           <h2 style="text-align: center;">资源共享</h2>
+        </ul>
+    </ul>
+</header>
+
+
+</body>
+</html>
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#    <head>#}
+{#        <meta charset="utf-8">#}
+{#        <meta http-equiv="X-UA-Compatible" content="IE=edge">#}
+{#           为了在IE上使用最新的渲染模式#}
+{#        <meta name="viewport" content="width=device-width, initial-scale=1">#}
+{#           控制网页（viewport即视口）大小和缩放，视口宽度默认是设备的宽度，缩放比例默认为1，即不做任何缩放#}
+{#        <title>Bootstrap的HTML标准模板</title>#}
+{#        <!-- Bootstrap -->#}
+{#        <link href="css/bootstrap.min.css" rel="stylesheet">#}
+{#           载入bootstrap的css样式#}
+{#        <!--你自己的样式文件 -->#}
+{#        <link href="css/your-style.css" rel="stylesheet">#}
+{#        <!-- 以下两个插件用于在IE8以及以下版本浏览器支持HTML5元素和媒体查询，如果不需要用可以移除 -->#}
+{#        <!--[if lt IE 9]>#}
+{#        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>#}
+{#        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>#}
+{#        <![endif]-->#}
+{#    </head>#}
+{#    <body>#}
+{#        <h1>Hello, world!asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfadsfasfdas</h1>#}
+{##}
+{#        <!-- 如果要使用Bootstrap的js插件，必须先调入jQuery -->#}
+{#        <script src="https://www.imooc.com/static/lib/jquery/1.9.1/jquery.js"></script>#}
+{#        <!-- 包括所有bootstrap的js插件或者可以根据需要使用的js插件调用　-->#}
+{#        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>#}
+{#    </body>#}
+{#注：CSS文件放在<head></head>中,JS文件放在<body></body>的最下面#}
+{#</html>#}

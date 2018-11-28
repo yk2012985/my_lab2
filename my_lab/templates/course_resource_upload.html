@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>课程文件上传</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maxium-scale=1,minimum-
+      scale=1,user-scalable=no">
+     <link rel="stylesheet"
+     href="/static/css2/bootstrap.min.css">
+</head>
+<body>
+{% include 'base2.html' %}
+<div class="container">
+        {% for message in messages %}
+           <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+</div>
+{#<form method="post" action="/upload_file/" autocomplete="off">#}
+{#    <div class="form-group">#}
+{#    这是一个下拉式菜单，选择文件的所属科目#}
+{#        <label for="course">所属科目：</label>#}
+{#        <select class="form-control" name="course">#}
+{#            {% for foo in courses %}#}
+{#                <option value="{{ foo.id }}">{{ foo.name }}</option>#}
+{#            {% endfor %}#}
+{#        </select>#}
+{#    </div>#}
+{#</form>#}
+<h3>科目：{{ course.name }}</h3>
+<form  enctype="multipart/form-data" autocomplete="off" method="post" action="/course/upload_file_action/" >
+    <div>
+        <input type="text" name="name">
+        <input type="file" name="upload"  >
+        <input type="hidden" name="course_id" value="{{course_id}}">
+        <input type="submit" value="提交 > " />
+        </div>
+</form>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>实验室编辑</title>
+    <link rel="stylesheet"
+     href="/static/css2/bootstrap.min.css">
+</head>
+<body>
+{% include 'base2.html' %}
+</div>
+<form method="post" action="/lab/lab_edit_action/" autocomplete="off">
+      <input type="hidden" name="lab_id" value="{{lab.id|default:'0'}}">
+{#      <input type="hidden" name="course_id" value="{{course.id|default:'1'}}">#}
+
+{#    另一种添加实验的思路：在实验编辑页面加一个科目选择框，用来选择所属科目；科目信息页面不传科目id来编辑页面，科目id在编辑页面里选择，问题是下拉菜单的参数如何传输#}
+        <div>
+            <label>实验室名称</label>
+            <input type="text" class="form-control" name="name" value="{{ lab.name }}" placeholder="必填">
+        </div>
+        <div>
+            <label>实验室位置</label>
+            <input type="text" class="form-control" name="locate" value="{{ lab.locate }}" placeholder="必填">
+        </div>
+        <div>
+            <label>实验室管理员</label>
+            <input type="text" class="form-control" name="admin" value="{{ lab.admin }}" placeholder="必填">
+        </div>
+        <div>
+            <label>实验室说明</label>
+{#            <input type="text" name="detail" value="{{ lesson.detail }}" placeholder="必填">#}
+            <textarea name="detail" rows="3" cols="70" class="form-control" placeholder="必填" >{{ lab.detail }}</textarea>
+{#            textarea没有value#}
+        </div>
+
+    <input type="submit" value="提交">
+    <input type="reset", value="清除重填">
+</form>
+</body>
+</html>

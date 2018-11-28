@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>模板</title>
+    <title>课程详情</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maxium-scale=1,minimum-
+      scale=1,user-scalable=no">
+     <link rel="stylesheet"
+     href="/static/css2/bootstrap.min.css">
+</head>
+<body>
+<h1 style="text-align: center">南京理工大学实验管理系统2.0</h1>
+ <div class="container">
+     <nav class="navbar navbar-inverse">
+         <a href={% url 'index' %} class="navbar-brand">首页</a>
+         <ul class="nav navbar-nav">
+             <li><a href="{% url 'course:course_list' %}">科目列表</a></li>
+             <li><a href="{% url 'report' %}">实验报告</a></li>
+             <li><a href="{% url 'course:lesson_edit_page' 1 0 %}">添加实验</a></li>
+             <li><a href="/log_out/">用户注销</a></li>
+         </ul>
+     </nav>
+
+ </div>
+</body>
+</html>
