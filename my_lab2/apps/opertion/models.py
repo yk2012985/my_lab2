@@ -26,7 +26,7 @@ class LessonPublic(models.Model):
 # 实验预约
 class LessonSubscribe(models.Model):
     student = models.ForeignKey(UserProfile, null=True, blank=True, verbose_name="实验学生")
-    lesson = models.ForeignKey(Lesson, null=True, blank=True, verbose_name="预约实验")
+    lesson = models.ForeignKey(LessonPublic, null=True, blank=True, verbose_name="预约实验") # 对应已发布的实验课
     grade = models.IntegerField(default=0, verbose_name="实验分数")
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
 

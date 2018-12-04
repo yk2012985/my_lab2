@@ -1,19 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load staticfiles %}
 <head>
     <meta charset="UTF-8">
     <title>学生首页</title>
     <meta name="viewport" content="width=device-width,initial-scale=1, maxium-scale=1,minimum-
       scale=1,user-scalable=no">
-     <link rel="stylesheet"
-     href="/static/css2/bootstrap.min.css">
+
+    <script src="{% static "js/jquery.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "js/bootstrap.min.js" %}" type="text/javascript"></script>
+
 </head>
 <body>
+<h2>欢迎，{{ request.user.username }}</h2>
 {% include "base2.html" %}
-<div class="col-lg-4 col-lg-push-3">
-    <h2><a href="/report/">实验报告</a> </h2>
-    <h2><a href="{% url 'course:student_personal_lesson' %}">已选实验课</a> </h2>
-    <h2>项目进程</h2>
+<div>
+<h2>当前已发布的所有实验课</h2>
+    {% for lesson in lessons_public_all%}
+        <div class="lesson_public_instance">
+            <h3 class="lesson_title">实验题目：<a href="{% url 'operation:lesson_info' lesson.id %}">{{ lesson.lesson.title }}</a></h3>
+            <h3 class="lesson_lab">实验室：{{ lesson.lab.name }}</h3>
+            <h3 class="lesson_teacher">实验教师：{{ lesson.teacher.username }}</h3>
+            <input id="lesson_id" name="id" type="hidden" value="{{ lesson.id }}"/>
+            <ul>实验开始时间：<li title="lesson_start">{{ lesson.start_time }}</li></ul>
+            <ul>实验结束时间：<li title="lesson_stop">{{ lesson.stop_time }}</li></ul><br>
+            <button class="btn-info" name="subscribe_button">预约此实验</button>
+
+        <li title=""></li>
+        </div>
+
+    {% endfor %}
 </div>
+<div class="col-lg-4 col-lg-push-3">
+    <h2>当前已预约实验课</h2>
+    {% for lesson_subscribe in lessons_subscribe_all %}
+        <div class="lesson_subscribed_instance">
+            <h3 class="lesson_title"><a href="{% url 'operation:lesson_info' lesson_subscribe.lesson.id %}">{{ lesson_subscribe.lesson.lesson.title }}</a></h3>
+            <h3 class="lesson_lab">{{ lesson_subscribe.lesson.lab.name }}</h3>
+            <h3 class="lesson_teacher">{{ lesson_subscribe.lesson.teacher.username }}</h3>
+            <ul><li title="start">{{ lesson_subscribe.lesson.start_time }}</li></ul>
+            <ul><li title="stop">{{ lesson_subscribe.lesson.stop_time }}</li></ul>
+            <h3><a href="{% url 'operation:lesson_subscribe_delete' lesson_subscribe.id %}">取消预约</a></h3><br>
+
+        </div>
+    {% endfor %}
+
+</div>
+
+
+<script>
+
+    //实验课预约
+    $("[name='subscribe_button']").click(function () {
+        //点击预约按钮后就开始进行冲突检测
+        $(".lesson_subscribed_instance").css('color','black');
+        var this_lesson_public_instance = $(this).parent();//拿到当前按钮所在的实验包
+        var conflict_token = false; //冲突标志，默认为假
+        //var lesson_public_id = $(this).parent().find(".lesson_id").text();
+        //console.log(lesson_public_id);
+        alert('点击了一个预约按钮');//测试用，任何一个预约按钮点击后都可触发此事件，但是需要知道是第几个按钮被点击，因为要向后台传递此按钮所在实验包的id
+        //console.log($(this).parent().find("[title='lesson_start']").text());//测试用，输出点击的预约按钮所在的实验包的实验开始时间
+        var lesson_public_start_text = ($(this).parent().find("[title='lesson_start']").text()).replace(/年/g,"/").replace(/月/g,"/").replace(/日/g,"");
+        //由于页面上现实的是带有汉字的日期格式，必须将其修改成可以转化为Date的形式
+        var lesson_public_start = new Date(lesson_public_start_text);
+        //console.log(lesson_public_start.toString());//测试用
+
+        var lesson_public_stop_text = ($(this).parent().find("[title='lesson_stop']").text()).replace(/年/g,"/").replace(/月/g,"/").replace(/日/g,"");
+        //由于页面上现实的是带有汉字的日期格式，必须将其修改成可以转化为Date的形式
+        var lesson_public_stop = new Date(lesson_public_stop_text);
+        //console.log(lesson_public_stop.toString());//测试用
+        //至此，我们拿到了点击预约按钮所在的实验包的开始，结束时间的Date对象
+
+        var lessons_subscribed_instance = $(".lesson_subscribed_instance");//所有已预约的实验课
+        for(var i=0; i<lessons_subscribed_instance.length; i++){
+            //开始比较吧，别忘了时间格式转换
+            var subscribe_start = new Date($(lessons_subscribed_instance[i]).find("[title='start']").text().replace(/年/g,"/").replace(/月/g,"/").replace(/日/g,""));
+            var subscribe_stop = new Date($(lessons_subscribed_instance[i]).find("[title='stop']").text().replace(/年/g,"/").replace(/月/g,"/").replace(/日/g,""));
+
+            //console.log(subscribe_stop.toString());//测试用
+
+            var subscribe_start_string = subscribe_start.toLocaleDateString();
+            var lesson_public_start_string = lesson_public_start.toLocaleDateString();
+            //console.log(subscribe_start_string);
+            //console.log(subscribe_start);//测试用
+            if(subscribe_start_string === lesson_public_start_string){
+                //预约实验与当前已预约实验在同一天,需进一步比较
+                if(subscribe_start<=lesson_public_start && lesson_public_start<subscribe_stop || subscribe_start<lesson_public_stop && lesson_public_stop<=subscribe_stop) {
+                    //预约实验的开始或结束与当前已预约的实验有冲突，不能预约
+                    conflict_token = true; //将冲突标志设为真
+                    $(lessons_subscribed_instance[i]).css('color', 'red');
+                }
+            }
+        }
+
+        //比较循环结束
+        if(conflict_token === true){
+            alert('与已预约实验课有冲突，无法预约');
+        }
+        else {
+            lesson_subscribe(this_lesson_public_instance.find("#lesson_id"));
+        }
+
+
+
+    });
+
+
+    //实验预约函数
+    function lesson_subscribe(s) {
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "{% url "operation:lesson_subscribe" %}",
+            data: s.serialize(),
+            success: function (data) {
+                if(data.status == 'success'){
+                    alert('预约成功！');
+                    window.location.reload();
+                }
+                else if(data.status == 'fail'){
+                    alert('操作失败');
+                    window.location.reload();
+                }
+            }
+
+
+    });
+    }
+
+
+
+
+
+
+
+
+</script>
 </body>
 </html>

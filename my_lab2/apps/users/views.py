@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import render
-from opertion.models import LessonPublic
+from opertion.models import LessonPublic, LessonSubscribe
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic.base import View
 from .models import UserProfile
@@ -84,18 +84,41 @@ class TeacherIndexView(View):
     """
     def get(self, request):
         # courses = Course.objects.all()
-        name = request.user.username
-        # teacher = UserProfile.objects.get(user=request.user)
-        lesson_public = LessonPublic.objects.filter(teacher=request.user)
-        lessons = []  # 用于装发布的lesson
-        for lesson in lesson_public:
-            lessons.append(lesson.lesson)
-        return render(request, 'teacher_index.html', {
-            'lessons': lesson_public
-        })
+        if request.user.type == 'teacher':
+            name = request.user.username
+            # teacher = UserProfile.objects.get(user=request.user)
+            lesson_public = LessonPublic.objects.filter(teacher=request.user)
+
+            lessons = []  # 用于装发布的lesson，并没有用到
+            for lesson in lesson_public:
+                lessons.append(lesson.lesson)
+
+            return render(request, 'teacher_index.html', {
+                'lessons': lesson_public
+            })
+        else:
+            return render(request, "login2.html", {}) # 等到设置好logout后，将这里修改掉，先注销再返回登录页
 
 
 class StudentIndexView(View):
-    pass
+    """
+    学生首页
+    """
+    def get(self, request):
+        # courses = Course.objects.all()
+        if request.user.type == 'student':
+            name = request.user.username
+            # teacher = UserProfile.objects.get(user=request.user)
+            lessons_public_all = LessonPublic.objects.all() # 全部已发布的实验课
+            lessons_subscribe_all = LessonSubscribe.objects.filter(student=request.user).order_by() # 全部已预约的实验课
+            lessons = []  # 用于装已预约的LessonPublic
+            for lesson in lessons_subscribe_all:
+                lessons.append(lesson.lesson) # 注意lesson_subscribe中的lesson对应的是LessonPublic
+            return render(request, 'student_index.html', {
+                'lessons_subscribe_all': lessons_subscribe_all,
+                'lessons_public_all': lessons_public_all
+            })
+        else:
+            return render(request, "login2.html", {}) # 等到设置好logout后，将这里修改掉，先注销再返回登录页
 
 

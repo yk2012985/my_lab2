@@ -23,11 +23,12 @@
 
     <h2>实验开始时间：{{ lesson.start_time }}</h2>
     <h2>实验结束时间：{{ lesson.stop_time }}</h2>
-    <h2>指导教师：{{ request.user.username }}</h2>
+    <h2>指导教师：{{ lesson.teacher.username }}</h2>
     <h2>实验教室:{{ lesson.lab.name }}</h2>
     <span><i class="aui-iconfont aui-icon-file"></i>{{ lesson.lesson.title }} </span>
     <h2><a href="{{ MEDIA_URL }}{{ lesson.lesson.template }}" class="downcode" target="_blank" download="" data-id="274" title="">模板下载</a></h2>
-    <h2><a href="{% url 'operation:lesson_edit' lesson.id %}">修改</a> </h2>
+
+{#    <h2><a href="{% url 'operation:lesson_edit' lesson.id %}">修改</a> </h2>#}
 {#    {% for lab in labs %}#}
 {#        <a href="{% url 'lab:lab_info' lab.id %}">{{ lab.name }}</a></h2>#}
 {#    {% endfor %}#}

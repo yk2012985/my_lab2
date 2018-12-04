@@ -1,20 +1,366 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load staticfiles %}
 <head>
     <meta charset="UTF-8">
     <title>实验发布</title>
 </head>
 <body>
+<script src="{% static "js/jquery.min.js" %}" type="text/javascript"></script>
 {% include 'base2.html' %}
 <form action="{% url 'operation:lesson_public_submit' %}" method="post" autocomplete="off">
     {% if msg %}<h2>{{ msg }}</h2>{% endif %}
     <div>
         <h2>实验课发布信息</h2>
-        {{ lesson_public_form }}
+        {{ lesson_public_form }}<br>
     </div>
-    <input type="hidden" name="lesson_id" value="{{lesson_public_id|default:'0'}}">
-    <input class="btn" type="submit" value="发布实验">
+
+    <input  id="public_btn" class="btn" type="submit" disabled value="发布实验">
 </form>
 
+<form id="test_form">
+    <input  type="text" id="test" name="t1" value="测试数据" >
+{#    <input type="text" class="btn" id="test_submit" value="提交测试"/>#}
+    <button type="button" id="test_submit">提交测试</button>
+</form>
+<div id="recom_time"></div>
+<div id="test_div">
+    <h2 id="test_h2"></h2>
+</div>
+
+<script>
+    //异步实验室课程信息查询
+    $('#id_lab').change(function () {
+
+            $.ajax({
+            cache: false,
+            type: "POST",
+            url: "{% url "operation:lab_lessons" %}",
+            data: $('#id_lab').serialize(),
+            success: function (data) {
+                $('#test_div').empty();//清空显示的数据
+                for (let i=0;i<data.length;i++) //重新装填数据
+                    {
+                        let m = $('<ul name="lesson_instance"></ul>').appendTo($('#test_div'));
+
+                        let a = $('<h1></h1>').appendTo(m);
+                        a.append('实验名称：')
+                        let a1= $('<li name="lesson_title"></li>').appendTo(a);
+                        a1.append(data[i].lesson);
+
+                        //let b = $('<h1 name="lesson_teacher"></h1>').appendTo($('#test_ul'));
+                        let b = $('<h1 name="lesson_teacher"></h1>').appendTo(m);
+                        b.append('实验教师：'+data[i].teacher);
+
+                        let c = $('<h1 name="lesson_lab"></h1>').appendTo(m);
+                        c.append('实验室：'+data[i].lab);
+
+                        let d = $('<h1></h1>').appendTo(m);
+                        d.append('开始时间：');
+                        let d1 = $('<li name="lesson_start"></li>').appendTo(d);
+                        d1.append(data[i].start_time);
+
+                        let e = $('<h1></h1>').appendTo(m);
+                        e.append('结束时间：');
+                        let e1 = $('<li name="lesson_stop"></li>').appendTo(e);
+                        e1.append(data[i].stop_time);
+
+                        let f = $('<h1 name="lesson_add_time"></h1>').appendTo(m);
+                        f.append('添加时间：'+data[i].add_time);
+
+                    }
+
+
+            }
+            })
+    });
+
+
+    //异步课程开始时间信息查询
+    $('#id_start_time').change(function () {
+
+        var lab_id = $('#id_lab').val();
+        if(lab_id === '1')  //如果选择第一个实验室
+        {
+            $.ajax({
+            cache: false,
+            type: "POST",
+            url: "{% url "operation:lab_date_public" '1' %}",
+            data: $('#id_start_time').serialize(),
+            success: function (data) {
+                    $('#test_div').empty();
+                    for (let i=0;i<data.length;i++)
+                    {
+                        // 生成所填开始时间当天的所有实验
+                        let m = $('<ul name="lesson_instance"></ul>').appendTo($('#test_div'));
+
+                        let a = $('<h1></h1>').appendTo(m);
+                        a.append('实验名称：');
+                        let a1= $('<li name="lesson_title"></li>').appendTo(a);
+                        a1.append(data[i].lesson);
+
+                        //let b = $('<h1 name="lesson_teacher"></h1>').appendTo($('#test_ul'));
+                        let b = $('<h1 name="lesson_teacher"></h1>').appendTo(m);
+                        b.append('实验教师：'+data[i].teacher);
+
+                        let c = $('<h1 name="lesson_lab"></h1>').appendTo(m);
+                        c.append('实验室：'+data[i].lab);
+
+                        let d = $('<h1></h1>').appendTo(m);
+                        d.append('开始时间：');
+                        let d1 = $('<li name="lesson_start"></li>').appendTo(d);
+                        d1.append(data[i].start_time);
+
+                        let e = $('<h1></h1>').appendTo(m);
+                        e.append('结束时间：');
+                        let e1 = $('<li name="lesson_stop"></li>').appendTo(e);
+                        e1.append(data[i].stop_time);
+
+                        let f = $('<h1 name="lesson_add_time"></h1>').appendTo(m);
+                        f.append('添加时间：'+data[i].add_time);
+
+                    }
+
+                    //alert($("[name='lesson_title']").text());
+                    recommend_time();
+
+
+
+                }
+            })
+        }
+        else {
+            $.ajax({
+            cache: false,
+            type: "POST",
+            url: "{% url "operation:lab_date_public" '2' %}",
+            data: $('#id_start_time').serialize(),
+
+            //data: [$('#id_lab'),$('#id_start_time')].serialize(),//因为serialize()对象不是表单形式，无法正常的serialize，故无法发出请求
+
+            //data: [$('#id_lab').serialize(),$('#id_start_time').serialize()],//传到后台是一个包含两个空字符串的数组
+
+            //data: {'id_lab':$('#id_lab').serialize(),
+            //        'id_start_time':$('#id_start_time').serialize()
+            //       },//<QueryDict: {'id_lab': ['lab=1'], 'id_start_time': ['start_time=2018%2F12%2F02+10%3A04']}>
+
+            //data: {$('#id_lab').serialize(),$('#id_start_time').serialize()},//不能这样写，字典形式必须要有key，不能只有value
+
+            //dataType: text,
+            //async: true,
+
+            success: function (data) {
+                $('#test_div').empty();
+                    for (let i=0;i<data.length;i++)
+                    {
+                        // 生成所填开始时间当天的所有实验
+                        let m = $('<ul name="lesson_instance"></ul>').appendTo($('#test_div'));
+
+                        let a = $('<h1></h1>').appendTo(m);
+                        a.append('实验名称：');
+                        let a1= $('<li name="lesson_title"></li>').appendTo(a);
+                        a1.append(data[i].lesson);
+
+                        //let b = $('<h1 name="lesson_teacher"></h1>').appendTo($('#test_ul'));
+                        let b = $('<h1 name="lesson_teacher"></h1>').appendTo(m);
+                        b.append('实验教师：'+data[i].teacher);
+
+                        let c = $('<h1 name="lesson_lab"></h1>').appendTo(m);
+                        c.append('实验室：'+data[i].lab);
+
+                        let d = $('<h1></h1>').appendTo(m);
+                        d.append('开始时间：');
+                        let d1 = $('<li name="lesson_start"></li>').appendTo(d);
+                        d1.append(data[i].start_time);
+
+                        let e = $('<h1></h1>').appendTo(m);
+                        e.append('结束时间：');
+                        let e1 = $('<li name="lesson_stop"></li>').appendTo(e);
+                        e1.append(data[i].stop_time);
+
+                        let f = $('<h1 name="lesson_add_time"></h1>').appendTo(m);
+                        f.append('添加时间：'+data[i].add_time);
+
+                    }
+                    recommend_time();
+                }
+            })
+        }
+    });
+
+
+    // 推荐时间函数
+    function recommend_time(){
+        //找“空隙”函数
+
+        //求当天实验室开放时间
+        $("#recom_time").empty(); //清空推荐时间一栏
+
+        var lab_open = new Date($("#id_start_time").val()); //找到用户输入的实验开始时间，我们需要他的日期
+
+        lab_open.setHours(8); //将小时设为上午8点
+        lab_open.setMinutes(0); //分钟设为0，这样lab_open为当天的实验室开门时间对象
+        //console.log(lab_open.toString()); //测试用
+
+        //当天实验室关闭时间
+        var lab_close = new Date($("#id_start_time").val());
+        lab_close.setHours(20);
+        lab_close.setMinutes(0);
+        //console.log(lab_close.toString()); //测试用，同理我们得到了当天实验室关门的时间对象
+
+        var recommend_time = []; // 设立推荐时间列表
+
+        if($("[name='lesson_instance']").length === 0){  //当日此实验室没有已发布实验课
+            var entire_day = lab_open.toLocaleTimeString() + '~' + lab_close.toLocaleTimeString();//推荐时间就是实验室开放到实验室关闭
+            //console.log(entire_day);
+            recommend_time.push(entire_day);
+        }
+
+        else {       //当日此实验室有已发布的实验
+            //1.找开门时间与第一节已有实验课之间的空隙
+        var lesson_first = new Date($("[name='lesson_start']:first").text()); //获取第一个已发布实验时间对象
+        if(lesson_first-lab_open >= 7200000){  // 如果开门时间与已有的第一节实验之间有大于两小时的空隙，则该时间段可以被推荐
+            var recom_time = lab_open.toLocaleTimeString() + '~' + lesson_first.toLocaleTimeString();
+            //console.log(recom_time); //测试用
+            recommend_time.push(recom_time);
+            //console.log(recommend_time[0]); //测试用
+        }
+
+        //2.找所有已有实验课之间的空隙
+        //$("[name='lesson_instance']").each(function (index, element) {
+            //var lesson_start = $(this).find();
+        //});
+
+        var lessons = $("[name='lesson_instance']");//拿到页面上所有实验课包
+
+        test_date = new Date($(lessons[1]).find("[name='lesson_start']").text());// 测试用
+        //console.log(test_date); //测试用
+
+
+        for(var i=0; i<lessons.length-1; i++){
+
+            let lesson_front_stop = new Date($(lessons[i]).find("[name='lesson_stop']").text());
+            //console.log(lesson_front_stop.toLocaleDateString()+lesson_front_stop.toLocaleTimeString());// 测试用
+            let lesson_behind_start = new Date($(lessons[i+1]).find("[name='lesson_start']").text());
+
+            if(lesson_behind_start - lesson_front_stop >= 7200000){
+                var recom_time2 = lesson_front_stop.toLocaleTimeString() + '~' + lesson_behind_start.toLocaleTimeString();
+                recommend_time.push(recom_time2);
+            }
+
+        }
+
+
+        //3.找关门时间与最后一节已有实验课之间的空隙
+        var lesson_last = new Date($("[name='lesson_stop']:last").text()); //获取第一个已发布实验时间对象
+        if(lab_close-lesson_last >= 7200000){  // 如果开门时间与已有的第一节实验之间有大于两小时的空隙，则该时间段可以被推荐
+            var recom_time3 = lesson_last.toLocaleTimeString() + '~' + lab_close.toLocaleTimeString();
+            //console.log(recom_time); //测试用
+            recommend_time.push(recom_time3);
+            //console.log(recommend_time[0]); //测试用
+        }
+        }
+
+
+        let reco_time = $("#recom_time");// 准备输出推荐时间
+        let reco_title = $('<h3 name="reco_title"></h3>').appendTo(reco_time);
+        reco_title.append('可用时间段（默认实验时间为两小时）：');
+
+        for(j=0; j<recommend_time.length; j++){
+            let add_item = $('<h3 name="add_item"></h3>').appendTo(reco_time);
+            //$("[name='add_item']").append(recommend_time[j]);
+            add_item.append(recommend_time[j]+',');
+            //console.log(recommend_time[j]); //测试用
+        }
+
+    }
+
+
+
+    //校对函数
+    function lesson_checkout(){
+
+
+
+        //var input_start = new Date($('#id_start_time').val()) ;
+        var lab_open = new Date($('#id_start_time').val()) ;
+        lab_open.setHours(8); // 注意：这里修改lab_open会将input_start也修改掉！
+        lab_open.setMinutes(0);//设置实验室开门时间
+
+        var lab_close = new Date($('#id_start_time').val());
+        lab_close.setHours(20);
+        lab_close.setMinutes(0);//设置实验室关门时间
+
+        //console.log(lab_open.toString());//测试用
+        //console.log(lab_close.toString());//测试用
+
+        //console.log($('#id_start_time').val());// 测试用
+        var input_start = new Date($('#id_start_time').val());//重新获取
+        var input_stop = new Date($('#id_stop_time').val());
+        var submit_token = true; //是否可以提交标志
+        //console.log(input_start.toString(), input_stop.toString()); //测试用
+        if(input_stop - input_start !== 7200000){
+            console.log(input_start.toString()); //测试用
+            console.log(input_stop.toString()); //测试用
+            alert('实验时长为2小时！');
+            //console.log(input_stop - input_start);
+        }
+        else {
+            if(input_start<lab_open || input_stop>lab_close){
+                alert('实验时间早于实验室开放时间或迟于实验室关闭时间！实验室开放时间为8:00~20:00！');
+            }
+            else {
+                if($("[name='lesson_instance']").length === 0){  //当前没有已发布的实验课，不用进一步比较
+                    $('#public_btn').removeAttr("disabled");
+                }
+                else {
+                    var lessons = $("[name='lesson_instance']");//拿到页面上所有实验课包
+                    var start = new Date($('#id_start_time').val()) ;//重新取得实验开始时间输入值
+                    var stop = new Date($('#id_stop_time').val()) ;//重新取得实验结束时间输入值
+
+                    for(var i=0; i<lessons.length; i++){
+                        var lesson_start = new Date($(lessons[i]).find("[name='lesson_start']").text());//当前实验包的开始时间
+                        //console.log(lesson_start.toString());//测试用
+                        var lesson_stop = new Date($(lessons[i]).find("[name='lesson_stop']").text());//当前实验包的结束时间
+                        //console.log(lesson_stop.toString()); //测试用
+                        console.log(start.toString());//测试用
+                        console.log(stop.toString());//测试用
+                        if(lesson_start<start && start<lesson_stop || lesson_start<stop && stop<lesson_stop){
+                            $(lessons[i]).css('color','red');
+                            submit_token = false;//不能提交
+                        }
+
+
+
+                        //if(lesson_start<input_start<lesson_stop || lesson_start<input_stop<lesson_stop){
+                            //$(lessons[i]).css('color','red');
+                        //}
+                        //else {
+
+                        //}
+
+                    }
+                    if(submit_token === true){
+                        $('#public_btn').removeAttr("disabled");//没有冲突可以提交
+                    }
+
+                }
+
+
+            }
+        }
+
+    }
+
+
+    //当输入实验结束时间后进行校验
+    $('#id_stop_time').change(function () {
+        lesson_checkout();
+
+
+
+
+    })
+</script>
 </body>
 </html>
