@@ -83,8 +83,8 @@
       <file leaf-file-name="student_index.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/apps/users/templates/student_index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1829">
-              <caret line="29" column="14" lean-forward="true" selection-start-line="29" selection-start-column="14" selection-end-line="29" selection-end-column="14" />
+            <state relative-caret-position="496">
+              <caret line="59" column="45" selection-start-line="59" selection-start-column="45" selection-end-line="59" selection-end-column="45" />
             </state>
           </provider>
         </entry>
@@ -154,7 +154,7 @@
     <replaceStrings>
       <replace>args=(lesson.id,lesson_id)</replace>
       <replace>args=(lesson_id,course.id)</replace>
-      <replace />
+      <replace>args=(course.id, lesson_id,)</replace>
       <replace>recommend</replace>
       <replace>lab_lesson_public</replace>
     </replaceStrings>
@@ -224,7 +224,7 @@
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths />
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-202" />
     <option name="y" value="304" />
     <option name="width" value="1885" />
@@ -848,8 +848,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/apps/users/templates/student_index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1829">
-          <caret line="29" column="14" lean-forward="true" selection-start-line="29" selection-start-column="14" selection-end-line="29" selection-end-column="14" />
+        <state relative-caret-position="496">
+          <caret line="59" column="45" selection-start-line="59" selection-start-column="45" selection-end-line="59" selection-end-column="45" />
         </state>
       </provider>
     </entry>

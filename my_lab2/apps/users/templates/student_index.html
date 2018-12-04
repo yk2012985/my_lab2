@@ -57,7 +57,7 @@
         var this_lesson_public_instance = $(this).parent();//拿到当前按钮所在的实验包
         var conflict_token = false; //冲突标志，默认为假
         //var lesson_public_id = $(this).parent().find(".lesson_id").text();
-        //console.log(lesson_public_id);
+        //console.log(lesson_public_id);//测试用
         alert('点击了一个预约按钮');//测试用，任何一个预约按钮点击后都可触发此事件，但是需要知道是第几个按钮被点击，因为要向后台传递此按钮所在实验包的id
         //console.log($(this).parent().find("[title='lesson_start']").text());//测试用，输出点击的预约按钮所在的实验包的实验开始时间
         var lesson_public_start_text = ($(this).parent().find("[title='lesson_start']").text()).replace(/年/g,"/").replace(/月/g,"/").replace(/日/g,"");
