@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.generic.base import View
+from courses.models import LessonResource
 from courses.forms import LessonPublicForm
 from measure.models import Laboratory
 
@@ -57,9 +58,13 @@ class LessonPublicInfoView(View):
     已发布实验课详情页
     """
     def get(self, request, lesson_id):
-        lesson = LessonPublic.objects.get(id=lesson_id)
+        lesson_public = LessonPublic.objects.get(id=lesson_id)
+        lesson = lesson_public.lesson
+        lesson_resource = LessonResource.objects.filter(lesson=lesson)
         return render(request, 'lesson_info.html', {
-            'lesson': lesson
+            'lesson_public': lesson_public,
+            'lesson': lesson,
+            'lesson_resource': lesson_resource
         })
 
 
@@ -155,12 +160,6 @@ class LabDatePublicView(View):
             test_data = json.dumps(lesson_public_list)
             print(test_data)
             return HttpResponse(test_data , content_type='application/json')
-
-
-
-
-
-
 
 
 class LessonSubscribeView(View):

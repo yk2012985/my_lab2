@@ -52,6 +52,9 @@ class LessonAddSubmitView(View):
             })
 
 class InputTestView(View):
+    """
+    测试用
+    """
     def get(self, request):
         return render(request, "login2.html")
 
