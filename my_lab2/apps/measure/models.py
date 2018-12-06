@@ -1,5 +1,5 @@
 from django.db import models
-
+# from opertion.models import LessonSubscribe  #
 # Create your models here.
 
 from datetime import datetime
@@ -24,6 +24,9 @@ class Laboratory(models.Model):
 
 
 class Device(models.Model):
+    """
+    实验仪器
+    """
     name = models.CharField(max_length=20, verbose_name="仪器名称")
     kind = models.CharField(max_length=10, verbose_name='仪器属性')
     laboratory = models.ForeignKey(Laboratory, on_delete=models.CASCADE, verbose_name="信号源所属的实验室")
@@ -37,5 +40,4 @@ class Device(models.Model):
 
     def __str__(self):
         return self.name
-
 

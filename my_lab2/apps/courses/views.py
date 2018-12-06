@@ -90,6 +90,11 @@ class InputTestView(View):
 
 
 def lesson_public_json(l):
+    """
+    测试用
+    :param l:
+    :return:
+    """
 
     # def student2dict(std):
     #     return {

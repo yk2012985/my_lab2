@@ -5,7 +5,7 @@ from courses.forms import LessonPublicForm
 from measure.models import Laboratory
 
 from django.urls import reverse
-from .models import LessonPublic, LessonSubscribe
+from .models import LessonPublic, LessonSubscribe, LessonReport
 from django.http import HttpResponse, HttpResponseRedirect
 import json
 from datetime import datetime
@@ -55,17 +55,36 @@ class LessonPublicSubmitView(View):
 
 class LessonPublicInfoView(View):
     """
-    已发布实验课详情页
+    教师已发布实验课详情页
     """
     def get(self, request, lesson_id):
         lesson_public = LessonPublic.objects.get(id=lesson_id)
         lesson = lesson_public.lesson
         lesson_resource = LessonResource.objects.filter(lesson=lesson)
+        lesson_subscribes = LessonSubscribe.objects.filter(lesson=lesson_public) # 拿到预约此public的所有subscribe
+        reports = [] # 用来装填预约此lesson_public的subscribe的所有的report
+        for subscribe in lesson_subscribes:
+
+            report = LessonReport.objects.filter(lesson=subscribe) # 注意这里用的是filter，所以report是一个QuerySet,
+                                                                    # 不是单个的LessonReport实例，前端页面上要来个双重循环
+            reports.append(report)
+
+
         return render(request, 'lesson_info.html', {
             'lesson_public': lesson_public,
             'lesson': lesson,
-            'lesson_resource': lesson_resource
+            'lesson_resource': lesson_resource,
+            'lesson_reports': reports
         })
+
+
+class StudentLessonInfoView(View):
+    """
+    教师已发布实验课详情页
+    """
+    def get(self, request, lesson_id):
+        pass
+
 
 
 class LessonPublicDeleteView(View):
@@ -192,6 +211,31 @@ class LessonSubscribeDeleteView(View):
         lesson_subscribed.delete()
 
         return HttpResponseRedirect(reverse('student_index'))
+
+
+class ReportResultSaveView(View):
+    """
+    实验报告结果保存
+    """
+    def get(self, request):
+        return render(request, "login2.html")
+
+    def post(self, request):
+        try:
+            report_id = request.POST.get("report_id", '1')
+            grade = request.POST.get("grade",'0')
+            if_com = request.POST.get("complete",'n')
+        except:
+            return HttpResponse('{"status":"fail"}', content_type='application/json')
+        report = LessonReport.objects.get(id=report_id)
+        subscribe = report.lesson
+        subscribe.grade = grade
+        if if_com == 'y':
+            subscribe.complete = True
+        else:
+            subscribe.complete = False
+        subscribe.save()
+        return HttpResponse('{"status":"success"}', content_type='application/json')
 
 
 

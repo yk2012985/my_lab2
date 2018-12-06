@@ -1,6 +1,6 @@
 from django.db import models
 from users.models import UserProfile
-from measure.models import Laboratory
+# from measure.models import Laboratory
 from datetime import datetime
 # Create your models here.
 

@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from .views import LessonPublicView, LessonPublicSubmitView, LessonPublicInfoView,LessonPublicDeleteView\
-    , LabLessonsView, LabDatePublicView, LessonSubscribeView, LessonSubscribeDeleteView
+    , LabLessonsView, LabDatePublicView, LessonSubscribeView, LessonSubscribeDeleteView, ReportResultSaveView\
+    ,StudentLessonInfoView
 urlpatterns = [
 
     url(r'^lesson/public', LessonPublicView.as_view(), name='lesson_public'),
@@ -8,8 +9,11 @@ urlpatterns = [
     url(r'^add_lesson_public/$', LessonPublicSubmitView.as_view(), name='lesson_public_submit'),
 
 
-
+    # 教师实验信息详情
     url(r'^lesson/info/(?P<lesson_id>\d+)$', LessonPublicInfoView.as_view(), name='lesson_info'),
+
+    # 学生实验信息详情
+    url(r'^lesson/student/info/(?P<lesson_id>\d+)$', StudentLessonInfoView.as_view(), name='student_lesson_info'),
 
     #url(r'^lesson/edit/(?P<lesson_id>\d+)$', LessonPublicEditView.as_view(), name='lesson_edit'),
 
@@ -28,6 +32,11 @@ urlpatterns = [
 
     # 学生预约实验删除
     url(r'^lesson_subscribe_delete/(?P<lesson_subscribe_id>\d+)$', LessonSubscribeDeleteView.as_view(), name='lesson_subscribe_delete'),
+
+
+    # 实验报告批改结果保存
+    url(r'^report_result_save$', ReportResultSaveView.as_view(), name='report_result_save'),
+
 
 
     # url(r'^lesson/edit/(?P<lesson_id>\d+)$', LessonPublicEditView.as_view(), name='lesson_edit'),

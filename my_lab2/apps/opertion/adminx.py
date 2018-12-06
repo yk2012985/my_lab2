@@ -1,5 +1,5 @@
 import xadmin
-from .models import LessonPublic, LessonSubscribe
+from .models import LessonPublic, LessonSubscribe, LessonReport
 
 
 class LessonPublicAdmin(object):
@@ -14,5 +14,13 @@ class LessonSubscribeAdmin(object):
     list_filter = ['student', 'lesson']
 
 
+class LessonReportAdmin(object):
+    list_display = ['name', 'lesson', 'add_time']
+    search_fields = ['name', 'lesson']
+    list_filter = ['name', 'lesson']
+    #pass
+
+
 xadmin.site.register(LessonPublic, LessonPublicAdmin)
 xadmin.site.register(LessonSubscribe, LessonSubscribeAdmin)
+xadmin.site.register(LessonReport, LessonReportAdmin)

@@ -115,11 +115,11 @@
             url: "{% url "operation:lesson_subscribe" %}",
             data: s.serialize(),
             success: function (data) {
-                if(data.status == 'success'){
+                if(data.status === 'success'){
                     alert('预约成功！');
                     window.location.reload();
                 }
-                else if(data.status == 'fail'){
+                else if(data.status === 'fail'){
                     alert('操作失败');
                     window.location.reload();
                 }
