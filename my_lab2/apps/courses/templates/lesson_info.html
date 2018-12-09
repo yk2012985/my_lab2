@@ -56,31 +56,31 @@
 
     {% endfor %}
 
-    <h2>预约此实验的学生：</h2>
-    {% for reports in lesson_reports %}
-        <section title="lesson_report_instance">
-            {% for report in reports %}
-                <div>
-                    <h3>{{ report.lesson.student.username }}{% if report.lesson.complete  %}（已通过）{% else %}（未通过）{% endif %}</h3>
-
+{#    <h2>预约此实验的学生：</h2>#}
+{#    {% for reports in lesson_reports %}#}
+{#        <section title="lesson_report_instance">#}
+{#            {% for report in reports %}#}
+{#                <div>#}
+{#                    <h3>{{ report.lesson.student.username }}{% if report.lesson.complete  %}（已通过）{% else %}（未通过）{% endif %}</h3>#}
+{##}
     {#                <input id="lesson_id" name="id" type="hidden" value="{{ lesson.id }}"/>#}
-                    <ul title="report_instance">{{ MEDIA_URL }}{{ report.download }}</ul>
-                    <button title="report_show">显示报告</button>
-                    <form title="report_result_info">
-                        <input name="grade" type="text" placeholder="请输入分数"/>
-                        <input name="report_id" type="hidden" value="{{ report.id }}"/>
-                        <select title="if_com" name="complete">
-                            <option value="y">通过</option>
-                            <option value="n">不通过</option>
-                        </select>
-                    </form>
-
-                    <button title="report_submit">保存结果</button>
-                </div>
-            {% endfor %}
+{#                    <ul title="report_instance">{{ MEDIA_URL }}{{ report.download }}</ul>#}
+{#                    <button title="report_show">显示报告</button>#}
+{#                    <form title="report_result_info">#}
+{#                        <input name="grade" type="text" placeholder="请输入分数"/>#}
+{#                        <input name="report_id" type="hidden" value="{{ report.id }}"/>#}
+{#                        <select title="if_com" name="complete">#}
+{#                            <option value="y">通过</option>#}
+{#                            <option value="n">不通过</option>#}
+{#                        </select>#}
+{#                    </form>#}
+{##}
+{#                    <button title="report_submit">保存结果</button>#}
+{#                </div>#}
+{#            {% endfor %}#}
 {#            <div title="report_pdf"></div>#}
-        </section>
-    {% endfor %}
+{#        </section>#}
+{#    {% endfor %}#}
 <div id="resource_pdf">
 
 

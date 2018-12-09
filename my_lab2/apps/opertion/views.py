@@ -11,6 +11,83 @@ import json
 from datetime import datetime
 # Create your views here.
 
+class LessonPublicDoneView(View):
+    """
+    所有已完成实验
+    """
+    def get(self, request):
+        lesson_public_done = LessonPublic.objects.filter(complete=True)
+        return render(request, 'index_common.html', {
+            'lessons': lesson_public_done,
+            'part2': 'done'
+        })
+
+
+class LessonPublicUndoneView(View):
+    """
+    所有未完成实验
+    """
+    def get(self, request):
+        lesson_public_done = LessonPublic.objects.filter(complete=False)
+        return render(request, 'index_common.html', {
+            'lessons': lesson_public_done,
+            'part2': 'undone'
+        })
+
+class LessonPublicPersonalDoneView(View):
+    """
+    教师个人已完成实验
+    """
+    def get(self, request):
+        lesson_public_done = LessonPublic.objects.filter(teacher=request.user,complete=True)
+        return render(request, 'index_teacher.html',{
+            'lessons': lesson_public_done,
+            'part1': 'personal',
+            'part2': 'done'
+        })
+
+
+class LessonPublicPersonalUndoneView(View):
+    """
+    教师个人未完成实验
+    """
+    def get(self, request):
+        lesson_public_undone = LessonPublic.objects.filter(teacher=request.user,complete=False)
+        return render(request, 'index_teacher.html',{
+            'lessons': lesson_public_undone,
+            'part1': 'personal',
+            'part2': 'undone'
+        })
+
+
+class LabLessondoneView(View):
+    """
+    实验室所有完成实验
+    """
+    def get(self, request):
+        lab1 = Laboratory.objects.get(id=1)
+        lab2 = Laboratory.objects.get(id=2)
+        lab1_lesson = LessonPublic.objects.filter(lab=lab1, complete=True)
+        lab2_lesson = LessonPublic.objects.filter(lab=lab2, complete=True)
+        return render(request, 'lab_index.html', {
+            'lab1_lessons': lab1_lesson,
+            'lab2_lessons': lab2_lesson,
+            'part2': 'done'
+        })
+
+class LabLessonUndoneView(View):
+    def get(self, request):
+        lab1 = Laboratory.objects.get(id=1)
+        lab2 = Laboratory.objects.get(id=2)
+        lab1_lesson = LessonPublic.objects.filter(lab=lab1, complete=False)
+        lab2_lesson = LessonPublic.objects.filter(lab=lab2, complete=False)
+        return render(request, 'lab_index.html', {
+            'lab1_lessons': lab1_lesson,
+            'lab2_lessons': lab2_lesson,
+            'part2': 'undone'
+        })
+
+
 class LessonPublicView(View):
     """
     实验发布函数
@@ -55,6 +132,20 @@ class LessonPublicSubmitView(View):
 
 class LessonPublicInfoView(View):
     """
+    已发布实验课详情页
+    """
+    def get(self, request, lesson_id):
+        lesson_public = LessonPublic.objects.get(id=lesson_id)
+        lesson = lesson_public.lesson
+        lesson_resource = LessonResource.objects.filter(lesson=lesson)
+        return render(request, 'lesson_info.html', {
+            'lesson_public': lesson_public,
+            'lesson_resource': lesson_resource
+        })
+
+
+class TeacherLessonPublicInfoView(View):
+    """
     教师已发布实验课详情页
     """
     def get(self, request, lesson_id):
@@ -70,7 +161,7 @@ class LessonPublicInfoView(View):
             reports.append(report)
 
 
-        return render(request, 'lesson_info.html', {
+        return render(request, 'teacher_lesson_public_info.html', {
             'lesson_public': lesson_public,
             'lesson': lesson,
             'lesson_resource': lesson_resource,
@@ -78,12 +169,29 @@ class LessonPublicInfoView(View):
         })
 
 
-class StudentLessonInfoView(View):
+class   StudentLessonInfoView(View):
     """
     教师已发布实验课详情页
     """
     def get(self, request, lesson_id):
-        pass
+        lesson_public = LessonPublic.objects.get(id=lesson_id)
+        lesson = lesson_public.lesson
+        lesson_resource = LessonResource.objects.filter(lesson=lesson)
+        lesson_subscribes = LessonSubscribe.objects.filter(lesson=lesson_public) # 拿到预约此public的所有subscribe
+        reports = [] # 用来装填预约此lesson_public的subscribe的所有的report
+        for subscribe in lesson_subscribes:
+
+            report = LessonReport.objects.filter(lesson=subscribe) # 注意这里用的是filter，所以report是一个QuerySet,
+                                                                    # 不是单个的LessonReport实例，前端页面上要来个双重循环
+            reports.append(report)
+
+
+        return render(request, 'student_lesson_subscribe_info.html', {
+            'lesson_public': lesson_public,
+            'lesson': lesson,
+            'lesson_resource': lesson_resource,
+            'lesson_reports': reports
+        })
 
 
 

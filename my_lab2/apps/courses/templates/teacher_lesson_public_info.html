@@ -3,7 +3,7 @@
 {% load staticfiles %}
 <head>
     <meta charset="UTF-8">
-    <title>学生课程详情</title>
+    <title>实验课信息</title>
     <meta name="viewport" content="width=device-width,initial-scale=1,maxium-scale=1,minimum-
       scale=1,user-scalable=no">
 {#     <link rel="stylesheet"#}
@@ -66,6 +66,16 @@
     {#                <input id="lesson_id" name="id" type="hidden" value="{{ lesson.id }}"/>#}
                     <ul title="report_instance">{{ MEDIA_URL }}{{ report.download }}</ul>
                     <button title="report_show">显示报告</button>
+                    <form title="report_result_info">
+                        <input name="grade" type="text" placeholder="请输入分数"/>
+                        <input name="report_id" type="hidden" value="{{ report.id }}"/>
+                        <select title="if_com" name="complete">
+                            <option value="y">通过</option>
+                            <option value="n">不通过</option>
+                        </select>
+                    </form>
+
+                    <button title="report_submit">保存结果</button>
                 </div>
             {% endfor %}
 {#            <div title="report_pdf"></div>#}

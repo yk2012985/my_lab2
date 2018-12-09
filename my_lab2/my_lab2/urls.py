@@ -18,21 +18,23 @@ from django.views.static import serve
 from my_lab2.settings import MEDIA_ROOT
 from django.contrib import admin
 import xadmin
-from users.views import LoginView, IndexView, logout, TeacherIndexView, StudentIndexView
+from users.views import LoginView, IndexView, LabIndexView,IndexCommonView, TeacherIndexView, StudentIndexView, LogoutView
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
     url(r'^login/', LoginView.as_view(), name='user_login'),
-    url(r'^logout/', logout, name='logout'),
+    url(r'^logout/', LogoutView.as_view(), name='logout'),
     url(r'^$', IndexView.as_view(), name='index'),
 
     url(r'^course/', include('courses.urls', namespace='course')),
 
     url(r'^operation/', include('opertion.urls', namespace='operation')),
 
-
+    # 公共首页
+    url(r'^lesson/public/$', IndexCommonView.as_view(), name='Index_common'),
     url(r'^teacher_index/', TeacherIndexView.as_view(), name='teacher_index'),
     url(r'^student_index/', StudentIndexView.as_view(), name='student_index'),
-
+    # 实验室信息
+    url(r'^lab_index/', LabIndexView.as_view(), name='lab_index'),
     url(r'^lab/', include('measure.urls', namespace='lab')),
 
     url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),

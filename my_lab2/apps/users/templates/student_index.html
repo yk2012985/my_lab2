@@ -36,7 +36,7 @@
     <h2>当前已预约实验课</h2>
     {% for lesson_subscribe in lessons_subscribe_all %}
         <div class="lesson_subscribed_instance">
-            <h3 class="lesson_title"><a href="{% url 'operation:lesson_info' lesson_subscribe.lesson.id %}">{{ lesson_subscribe.lesson.lesson.title }}</a></h3>
+            <h3 class="lesson_title"><a href="{% url 'operation:student_lesson_info' lesson_subscribe.lesson.id %}">{{ lesson_subscribe.lesson.lesson.title }}</a></h3>
             <h3 class="lesson_lab">{{ lesson_subscribe.lesson.lab.name }}</h3>
             <h3 class="lesson_teacher">{{ lesson_subscribe.lesson.teacher.username }}</h3>
             <ul><li title="start">{{ lesson_subscribe.lesson.start_time }}</li></ul>

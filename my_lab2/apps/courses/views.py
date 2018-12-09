@@ -13,6 +13,15 @@ import json
 
 from datetime import datetime
 # Create your views here.
+class LessonPublicAllView(View):
+    """
+    返回所有已发布的实验课
+    """
+    def get(self, request):
+        lesson_public_all = LessonPublic.objects.all()
+        return render(request, 'teacher_index.html', {
+            'lessons': lesson_public_all
+        })
 
 
 class LessonAddView(View):
@@ -167,9 +176,6 @@ def lesson_public_json(l):
 #                 'lesson_public_form': lesson_public_form,
 #                 'msg': "实验课信息填充有误，请重新填写"
 #             })
-
-
-
 
 
 

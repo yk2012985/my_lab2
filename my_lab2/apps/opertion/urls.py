@@ -1,16 +1,40 @@
 from django.conf.urls import url
-from .views import LessonPublicView, LessonPublicSubmitView, LessonPublicInfoView,LessonPublicDeleteView\
+from .views import LessonPublicView, LessonPublicSubmitView, LessonPublicInfoView, TeacherLessonPublicInfoView,LessonPublicDeleteView\
     , LabLessonsView, LabDatePublicView, LessonSubscribeView, LessonSubscribeDeleteView, ReportResultSaveView\
-    ,StudentLessonInfoView
+    ,StudentLessonInfoView,LessonPublicDoneView, LessonPublicUndoneView, LessonPublicPersonalDoneView, LessonPublicPersonalUndoneView\
+    , LabLessondoneView, LabLessonUndoneView
 urlpatterns = [
 
+    # 返回所有已完成实验课
+    url(r'^lesson/public/done$', LessonPublicDoneView.as_view(), name='lesson_public_done'),
+
+    # 返回所有未完成实验课
+    url(r'^lesson/public/undone$', LessonPublicUndoneView.as_view(),name='lesson_public_undone'),
+
+    # 返回教师个人所有已完成实验课
+    url(r'^lesson/public/personal/done$', LessonPublicPersonalDoneView.as_view(), name='lesson_public_personal_done'),
+
+    # 返回教师个人所有未完成实验课
+    url(r'^lesson/public/personal/undone$', LessonPublicPersonalUndoneView.as_view(), name='lesson_public_personal_undone'),
+
+
     url(r'^lesson/public', LessonPublicView.as_view(), name='lesson_public'),
+
+    # 返回实验室所有完成实验情况
+    url(r'^lab/lesson/done$', LabLessondoneView.as_view(), name='lab_lesson_done'),
+
+    # 返回实验室所有未完成实验情况
+    url(r'^lab/lesson/undone$', LabLessonUndoneView.as_view(), name='lab_lesson_undone'),
 
     url(r'^add_lesson_public/$', LessonPublicSubmitView.as_view(), name='lesson_public_submit'),
 
 
-    # 教师实验信息详情
+    # 已发布实验信息详情
     url(r'^lesson/info/(?P<lesson_id>\d+)$', LessonPublicInfoView.as_view(), name='lesson_info'),
+
+
+    # 教师实验信息详情
+    url(r'^lesson/teacher/info/(?P<lesson_id>\d+)$', TeacherLessonPublicInfoView.as_view(), name='teacher_lesson_info'),
 
     # 学生实验信息详情
     url(r'^lesson/student/info/(?P<lesson_id>\d+)$', StudentLessonInfoView.as_view(), name='student_lesson_info'),

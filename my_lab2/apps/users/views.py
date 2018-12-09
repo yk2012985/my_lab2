@@ -4,6 +4,7 @@ from opertion.models import LessonPublic, LessonSubscribe
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic.base import View
 from .models import UserProfile
+from measure.models import Laboratory
 from .forms import LoginForm, RegisterForm
 from django.contrib import messages  # Django的信息显示框架用于显示登录提示信息
 from django.http import HttpResponse, HttpResponseRedirect
@@ -51,9 +52,7 @@ class LoginView(View):  # 我们在这里重构Django的View类，重写get和po
                     if user.type=="teacher":
                         return HttpResponseRedirect(reverse("teacher_index"))
                     elif user.type=="student":
-                        return render(request, "index2.html", {
-
-                        })
+                        return HttpResponseRedirect(reverse("student_index"))
                     else:
                         return render(request, "index2.html",{"user": request.user})
             else:
@@ -66,21 +65,37 @@ class LoginView(View):  # 我们在这里重构Django的View类，重写get和po
                 return render(request, "login2.html")
 
 
+class IndexCommonView(View):
+    """
+    公共首页,默认选择全部实验课
+    """
+    def get(self, request):
+        lesson_public_all = LessonPublic.objects.all()
+        return render(request, 'index_common.html', {
+            'lessons': lesson_public_all,
+            'part2': 'all'
+        })
 
-def log_out(request):  # 使用删除session的方式实现注销
-    logout(request)
-    # if 'username' in request.session:
-    #     del request.session["username"]  # 删除session
-    messages.add_message(request, messages.INFO, '注销成功')
-    return render(request, 'users/templates/login2.html')
-    # else:
-    #     return render(request, 'login2.html')
 
+class LabIndexView(View):
+    """
+    实验室信息页,默认选择全部实验课
+    """
+    def get(self, request):
+        lab1 = Laboratory.objects.get(id=1)
+        lab2 = Laboratory.objects.get(id=2)
+        lab1_lesson = LessonPublic.objects.filter(lab=lab1)
+        lab2_lesson = LessonPublic.objects.filter(lab=lab2)
+        return render(request, 'lab_index.html', {
+            'lab1_lessons': lab1_lesson,
+            'lab2_lessons': lab2_lesson,
+            'part2': 'all'
+        })
 
 
 class TeacherIndexView(View):
     """
-    教师首页
+    教师首页,默认选择个人全部实验课
     """
     def get(self, request):
         # courses = Course.objects.all()
@@ -93,10 +108,15 @@ class TeacherIndexView(View):
             for lesson in lesson_public:
                 lessons.append(lesson.lesson)
 
-            return render(request, 'teacher_index.html', {
-                'lessons': lesson_public
+            # return render(request, 'teacher_index.html', {
+            #     'lessons': lesson_public
+            # })
+            return render(request, 'index_teacher.html', {
+                'lessons': lesson_public,
+                'part2': 'all'
             })
         else:
+            logout(request)
             return render(request, "login2.html", {}) # 等到设置好logout后，将这里修改掉，先注销再返回登录页
 
 
@@ -110,7 +130,7 @@ class StudentIndexView(View):
             name = request.user.username
             # teacher = UserProfile.objects.get(user=request.user)
             lessons_public_all = LessonPublic.objects.all() # 全部已发布的实验课
-            lessons_subscribe_all = LessonSubscribe.objects.filter(student=request.user).order_by() # 全部已预约的实验课
+            lessons_subscribe_all = LessonSubscribe.objects.filter(student=request.user) # 全部已预约的实验课
             lessons = []  # 用于装已预约的LessonPublic
             for lesson in lessons_subscribe_all:
                 lessons.append(lesson.lesson) # 注意lesson_subscribe中的lesson对应的是LessonPublic
@@ -119,6 +139,14 @@ class StudentIndexView(View):
                 'lessons_public_all': lessons_public_all
             })
         else:
+            logout(request)
             return render(request, "login2.html", {}) # 等到设置好logout后，将这里修改掉，先注销再返回登录页
 
 
+class LogoutView(View):
+    """
+    用户注销
+    """
+    def get(self, request):
+        logout(request)
+        return render(request, 'login2.html')

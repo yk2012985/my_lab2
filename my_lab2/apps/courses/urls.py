@@ -1,6 +1,18 @@
 from django.conf.urls import url
-from .views import LessonAddView, LessonAddSubmitView, InputTestView
+from .views import LessonAddView, LessonAddSubmitView, InputTestView, LessonPublicAllView
 urlpatterns = [
+    # 返回所有已发布的实验课
+    url(r'^lesson/public/all$', LessonPublicAllView.as_view(), name='lesson_public_all'),
+
+    #返回教师
+
+
+
+
+
+
+
+
 
     url(r'^lesson_add$', LessonAddView.as_view(), name='lesson_add'),
 

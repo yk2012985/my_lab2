@@ -1,0 +1,81 @@
+{% extends 'index_model.html' %}
+
+{% block custom_title %}公共课程主页{% endblock %}
+{% block custom_left %}
+    <div id="left-side" class="col-sm-1 col-lg-1" style="display: block; margin-top: 68px; margin-left: 10px;">
+        <ul class="nav nav-pills nav-stacked">
+
+            <li class="h4 active"><a href="{% url 'Index_common' %}">所 有 实 验</a></li>
+
+            <li class="h4"><a href="{% url 'teacher_index' %}">我 的 实 验</a></li>
+
+            <li class="h4"><a href="">实 验 教 室</a></li>
+
+        </ul>
+    </div>
+{% endblock %}
+
+{% block custom_right %}
+    <div id="content_block" class="col-sm-9 col-lg-9 col-lg-push-1" style="margin-left: 16px;">
+                <h2 class="page-header text-center">已发布实验课</h2>
+                <ul class="nav nav-tabs" style="margin-bottom: 3px">
+                    <li {% ifequal part2 'all'%}class="h4 active" {% else %}class="h4"{% endifequal %}><a href="{% url 'Index_common' %}">全部</a></li>
+                    <li {% ifequal part2 'done'%}class="h4 active" {% else %}class="h4"{% endifequal %}><a href="{% url 'operation:lesson_public_done' %}">已完成</a></li>
+                    <li {% ifequal part2 'undone'%}class="h4 active" {% else %}class="h4"{% endifequal %}><a href="{% url 'operation:lesson_public_undone' %}">未完成</a></li>
+                </ul>
+
+                <div class="results table-responsive">
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead>
+                           <tr>
+                               <th class="h3 sortable active" scope="col">
+                                   <div class="dropdown">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">实验名称</a>-->
+                                       <h5>实验名称</h5>
+                                   </div>
+                               </th>
+                               <th class="h3 sortable info" scope="col">
+                                   <div class="dropdown">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">实验地点</a>-->
+                                       <h5>实验地点</h5>
+                                   </div>
+                               </th>
+                               <th class="h3 sortable danger" scope="col">
+                                   <div class="dropdown">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">实验教师</a>-->
+                                       <h5>实验教师</h5>
+                                   </div>
+                               </th>
+                               <th class="h3 sortable success" scope="col">
+                                   <div class="dropdown">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">开始时间</a>-->
+                                       <h5>开始时间</h5>
+                                   </div>
+                               </th>
+                               <th class="h3 sortable warning" scope="col">
+                                   <div class="dropdown pull-left">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">结束时间</a>-->
+                                       <h5>结束时间</h5>
+                                   </div>
+                               </th>
+                           </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for lesson in lessons %}
+                                <tr>
+                                    <td id="lesson_title" class="h3"><a href="{% url 'operation:teacher_lesson_info' lesson.id %}">{{ lesson.lesson.title }}</a></td>
+                                    <td id="lesson_lab" class="h3">{{ lesson.lab.name }}</td>
+                                    <td id="lesson_start" class="h3">{{ lesson.teacher.username }}</td>
+                                    <td id="lesson_stop" class="h3">{{ lesson.start_time }}</td>
+                                    <td id="lesson_stop" class="h3">{{ lesson.stop_time }}</td>
+
+{#                                    <td class="h3"><a href="{% url 'operation:lesson_delete' lesson.id %}">删除</a></td>#}
+
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+{% endblock %}
