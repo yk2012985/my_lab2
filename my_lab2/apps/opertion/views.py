@@ -161,7 +161,7 @@ class TeacherLessonPublicInfoView(View):
             reports.append(report)
 
 
-        return render(request, 'teacher_lesson_public_info.html', {
+        return render(request, 'teacher_lesson_info.html', {
             'lesson_public': lesson_public,
             'lesson': lesson,
             'lesson_resource': lesson_resource,
@@ -214,7 +214,7 @@ class LabLessonsView(View):
     def post(self, request):
         lab_id = request.POST.get("lab", "1") # 传过来的是实验室的id
         input_lab = Laboratory.objects.get(id=lab_id)
-        lab_lessons_public = LessonPublic.objects.filter(lab=input_lab).order_by('-add_time')
+        lab_lessons_public = LessonPublic.objects.filter(lab=input_lab, complete=False).order_by('-add_time')
         lesson_public_list = []
         for lab_lesson_public in lab_lessons_public:
             e = dict(teacher=lab_lesson_public.teacher.username,
@@ -244,7 +244,7 @@ class LabDatePublicView(View):
 
         input_lab = Laboratory.objects.get(id=lab_id) # 获取当前输入的实验室
 
-        test_lessons_public = LessonPublic.objects.filter(lab=input_lab).order_by('start_time')  # 获取该实验室目前实验发布的情况，
+        test_lessons_public = LessonPublic.objects.filter(lab=input_lab, complete=False).order_by('start_time')  # 获取该实验室目前实验发布的情况，
                                                                                               # 按照添加事件由近及远排列
         if input_start_time == '': # 没有输入开始时间，返回输入实验室所有实验情况
             lesson_public_list = []

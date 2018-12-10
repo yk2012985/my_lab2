@@ -1,35 +1,120 @@
-<!DOCTYPE html>
-<html lang="en">
-{% load staticfiles %}
-<head>
-    <meta charset="UTF-8">
-    <title>实验发布</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-</head>
-<body>
-<script src="{% static "js/jquery-1.11.3.js" %}" type="text/javascript"></script>
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#{% load staticfiles %}#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <title>实验发布</title>#}
+{#    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">#}
+{#</head>#}
+{#<body>#}
+{#<script src="{% static "js/jquery-1.11.3.js" %}" type="text/javascript"></script>#}
+{##}
+{#{% include 'base2.html' %}#}
+{#<form role="form" action="{% url 'operation:lesson_public_submit' %}" method="post" autocomplete="off">#}
+{#    {% if msg %}<h2>{{ msg }}</h2>{% endif %}#}
+{#    <div class="form-group">#}
+{#        <h2>实验课发布信息</h2>#}
+{#        {{ lesson_public_form }}#}
+{#    </div>#}
+{##}
+{#    <input  id="public_btn" class="btn" type="submit" disabled value="发布实验">#}
+{#</form>#}
+{##}
+{#<div id="recom_time"></div>#}
+{#<div id="test_div">#}
+{#    <h2 id="test_h2"></h2>#}
+{#</div>#}
+{% extends 'index_model.html' %}
+{% block custom_title %}发布新实验{% endblock %}
+{% block custom_left %}
+    <div id="left-side" class="col-sm-1 col-lg-1" style="display: block; margin-top: 68px; margin-left: 10px;">
+        <ul class="nav nav-pills nav-stacked">
 
-{% include 'base2.html' %}
-<form role="form" action="{% url 'operation:lesson_public_submit' %}" method="post" autocomplete="off">
-    {% if msg %}<h2>{{ msg }}</h2>{% endif %}
-    <div class="form-group">
-        <h2>实验课发布信息</h2>
-        {{ lesson_public_form }}
+            <li class="h4"><a href="{% url 'Index_common' %}">所 有 实 验</a></li>
+
+            <li class="h4 active"><a href="{% url 'teacher_index' %}">我 的 实 验</a></li>
+
+            <li class="h4"><a href="{% url 'lab_index' %}">实 验 教 室</a></li>
+
+        </ul>
     </div>
+{% endblock %}
+{% block custom_right %}
 
-    <input  id="public_btn" class="btn" type="submit" disabled value="发布实验">
-</form>
+    <div id="content_block" class="col-sm-9 col-lg-10  " style="margin-left: 80px;margin-top: 65px">
+        <div class="row">
+            <div id="content_block_left" class="col-lg-5">
+                <form role="form" action="{% url 'operation:lesson_public_submit' %}" method="post" autocomplete="off">
+{#              {% if msg %}<h2>{{ msg }}</h2>{% endif %}#}
+                <div class="form-group">
+                    <h2>实验课发布填写</h2>
+                    {{ lesson_public_form }}
+                </div>
 
-<div id="recom_time"></div>
-<div id="test_div">
-    <h2 id="test_h2"></h2>
-</div>
+                <input  id="public_btn" class="btn-info" type="submit" disabled value="发布实验">
+                </form>
+            </div>
 
+            <div id="content_block_right" class="col-sm-9 col-lg-6 " style="margin-left: 80px;">
+            <div id="recom_time"></div>
+                <div id="test_div">
+                <h4 id="test_h2"></h4>
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead>
+                           <tr>
+                               <th class="h3 sortable active" scope="col">
+                                   <div class="dropdown">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">实验名称</a>-->
+                                       <h5>实验名称</h5>
+                                   </div>
+                               </th>
+                               <th class="h3 sortable info" scope="col">
+                                   <div class="dropdown">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">实验地点</a>-->
+                                       <h5>实验地点</h5>
+                                   </div>
+                               </th>
+                               <th class="h3 sortable danger" scope="col">
+                                   <div class="dropdown">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">实验教师</a>-->
+                                       <h5>实验教师</h5>
+                                   </div>
+                               </th>
+                               <th class="h3 sortable success" scope="col">
+                                   <div class="dropdown">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">开始时间</a>-->
+                                       <h5>开始时间</h5>
+                                   </div>
+                               </th>
+                               <th class="h3 sortable warning" scope="col">
+                                   <div class="dropdown pull-left">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">结束时间</a>-->
+                                       <h5>结束时间</h5>
+                                   </div>
+                               </th>
+                           </tr>
+                        </thead>
+
+                        <tbody>
+
+                        </tbody>
+                    </table>
+            </div>
+
+        </div>
+
+        </div>
+
+    </div>
+{% endblock %}
+
+
+{% block custom_js %}
 <script>
     $.ready(
       $("input").attr({class:"form-control"}),
         $("select").attr({class:"form-control"}),
-        $("form").attr({class:"text-left"})
+        //$("form").attr({class:"text-left"})
 
     );
     //异步实验室课程信息查询
@@ -41,35 +126,39 @@
             url: "{% url "operation:lab_lessons" %}",
             data: $('#id_lab').serialize(),
             success: function (data) {
-                $('#test_div').empty();//清空显示的数据
+                //$('#test_div').empty();//清空显示的数据
+
+                $('tbody').empty(); //清空表格体，表头留着
                 for (let i=0;i<data.length;i++) //重新装填数据
                     {
-                        let m = $('<ul name="lesson_instance"></ul>').appendTo($('#test_div'));
+                        let m = $('<tr name="lesson_instance"></tr>').appendTo($('tbody')); // 定义一组数据容器，同时也是一个实验课实例
 
-                        let a = $('<h1></h1>').appendTo(m);
-                        a.append('实验名称：')
-                        let a1= $('<li name="lesson_title"></li>').appendTo(a);
+                        //let a = $('<div name="lesson_instance"></div>').appendTo(m); // 定义一组数据容器
+                        //a.append('实验名称：');
+
+                        let a1= $('<td></td>').appendTo(m); //定一个单元格数据容器
                         a1.append(data[i].lesson);
 
                         //let b = $('<h1 name="lesson_teacher"></h1>').appendTo($('#test_ul'));
-                        let b = $('<h1 name="lesson_teacher"></h1>').appendTo(m);
-                        b.append('实验教师：'+data[i].teacher);
+                        let b = $('<td></td>').appendTo(m);
+                        //alert(data[i].lab); //测试用
+                        b.append(data[i].lab);
 
-                        let c = $('<h1 name="lesson_lab"></h1>').appendTo(m);
-                        c.append('实验室：'+data[i].lab);
+                        let c = $('<td></td>').appendTo(m);
+                        c.append(data[i].teacher);
 
-                        let d = $('<h1></h1>').appendTo(m);
-                        d.append('开始时间：');
-                        let d1 = $('<li name="lesson_start"></li>').appendTo(d);
-                        d1.append(data[i].start_time);
+                        let d = $('<td name="lesson_start"></td>').appendTo(m);
+                                                          //d.append('开始时间：');
+                           //let d1 = $('<li name="lesson_start"></li>').appendTo(d);
+                        d.append(data[i].start_time);
 
-                        let e = $('<h1></h1>').appendTo(m);
-                        e.append('结束时间：');
-                        let e1 = $('<li name="lesson_stop"></li>').appendTo(e);
-                        e1.append(data[i].stop_time);
+                        let e = $('<td name="lesson_stop"></td>').appendTo(m);
+                                                          //e.append('结束时间：');
+                                         //let e1 = $('<li name="lesson_stop"></li>').appendTo(e);
+                        e.append(data[i].stop_time);
 
-                        let f = $('<h1 name="lesson_add_time"></h1>').appendTo(m);
-                        f.append('添加时间：'+data[i].add_time);
+                        //let f = $('<h4 name="lesson_add_time"></h4>').appendTo(m);
+                        //f.append('添加时间：'+data[i].add_time);
 
                     }
 
@@ -91,36 +180,37 @@
             url: "{% url "operation:lab_date_public" '1' %}",
             data: $('#id_start_time').serialize(),
             success: function (data) {
-                    $('#test_div').empty();
-                    for (let i=0;i<data.length;i++)
-                    {
-                        // 生成所填开始时间当天的所有实验
-                        let m = $('<ul name="lesson_instance"></ul>').appendTo($('#test_div'));
+                    //$('#test_div').empty();
 
-                        let a = $('<h1></h1>').appendTo(m);
-                        a.append('实验名称：');
-                        let a1= $('<li name="lesson_title"></li>').appendTo(a);
+                    $('tbody').empty(); //清空表格体，表头留着
+                    $("#recom_time").empty(); //清空推荐时间一栏
+                for (let i=0;i<data.length;i++)
+                    {
+                        let m = $('<tr name="lesson_instance"></tr>').appendTo($('tbody')); // 定义一组数据容器，同时也是一个实验课实例
+
+                        //let a = $('<div name="lesson_instance"></div>').appendTo(m); // 定义一组数据容器
+                        //a.append('实验名称：');
+
+                        let a1= $('<td></td>').appendTo(m); //定一个单元格数据容器
                         a1.append(data[i].lesson);
 
                         //let b = $('<h1 name="lesson_teacher"></h1>').appendTo($('#test_ul'));
-                        let b = $('<h1 name="lesson_teacher"></h1>').appendTo(m);
-                        b.append('实验教师：'+data[i].teacher);
+                        let b = $('<td></td>').appendTo(m);
+                        //alert(data[i].lab); //测试用
+                        b.append(data[i].lab);
 
-                        let c = $('<h1 name="lesson_lab"></h1>').appendTo(m);
-                        c.append('实验室：'+data[i].lab);
+                        let c = $('<td></td>').appendTo(m);
+                        c.append(data[i].teacher);
 
-                        let d = $('<h1></h1>').appendTo(m);
-                        d.append('开始时间：');
-                        let d1 = $('<li name="lesson_start"></li>').appendTo(d);
-                        d1.append(data[i].start_time);
+                        let d = $('<td name="lesson_start"></td>').appendTo(m);
+                                                          //d.append('开始时间：');
+                           //let d1 = $('<li name="lesson_start"></li>').appendTo(d);
+                        d.append(data[i].start_time);
 
-                        let e = $('<h1></h1>').appendTo(m);
-                        e.append('结束时间：');
-                        let e1 = $('<li name="lesson_stop"></li>').appendTo(e);
-                        e1.append(data[i].stop_time);
-
-                        let f = $('<h1 name="lesson_add_time"></h1>').appendTo(m);
-                        f.append('添加时间：'+data[i].add_time);
+                        let e = $('<td name="lesson_stop"></td>').appendTo(m);
+                                                          //e.append('结束时间：');
+                                         //let e1 = $('<li name="lesson_stop"></li>').appendTo(e);
+                        e.append(data[i].stop_time);
 
                     }
 
@@ -153,38 +243,39 @@
             //async: true,
 
             success: function (data) {
-                $('#test_div').empty();
-                    for (let i=0;i<data.length;i++)
+                $('tbody').empty(); //清空表格体，表头留着
+                $("#recom_time").empty(); //清空推荐时间一栏
+                for (let i=0;i<data.length;i++)
                     {
-                        // 生成所填开始时间当天的所有实验
-                        let m = $('<ul name="lesson_instance"></ul>').appendTo($('#test_div'));
+                        let m = $('<tr name="lesson_instance"></tr>').appendTo($('tbody')); // 定义一组数据容器，同时也是一个实验课实例
 
-                        let a = $('<h1></h1>').appendTo(m);
-                        a.append('实验名称：');
-                        let a1= $('<li name="lesson_title"></li>').appendTo(a);
+                        //let a = $('<div name="lesson_instance"></div>').appendTo(m); // 定义一组数据容器
+                        //a.append('实验名称：');
+
+                        let a1= $('<td></td>').appendTo(m); //定一个单元格数据容器
                         a1.append(data[i].lesson);
 
                         //let b = $('<h1 name="lesson_teacher"></h1>').appendTo($('#test_ul'));
-                        let b = $('<h1 name="lesson_teacher"></h1>').appendTo(m);
-                        b.append('实验教师：'+data[i].teacher);
+                        let b = $('<td></td>').appendTo(m);
+                        //alert(data[i].lab); //测试用
+                        b.append(data[i].lab);
 
-                        let c = $('<h1 name="lesson_lab"></h1>').appendTo(m);
-                        c.append('实验室：'+data[i].lab);
+                        let c = $('<td></td>').appendTo(m);
+                        c.append(data[i].teacher);
 
-                        let d = $('<h1></h1>').appendTo(m);
-                        d.append('开始时间：');
-                        let d1 = $('<li name="lesson_start"></li>').appendTo(d);
-                        d1.append(data[i].start_time);
+                        let d = $('<td name="lesson_start"></td>').appendTo(m);
+                                                          //d.append('开始时间：');
+                           //let d1 = $('<li name="lesson_start"></li>').appendTo(d);
+                        d.append(data[i].start_time);
 
-                        let e = $('<h1></h1>').appendTo(m);
-                        e.append('结束时间：');
-                        let e1 = $('<li name="lesson_stop"></li>').appendTo(e);
-                        e1.append(data[i].stop_time);
-
-                        let f = $('<h1 name="lesson_add_time"></h1>').appendTo(m);
-                        f.append('添加时间：'+data[i].add_time);
+                        let e = $('<td name="lesson_stop"></td>').appendTo(m);
+                                                          //e.append('结束时间：');
+                                         //let e1 = $('<li name="lesson_stop"></li>').appendTo(e);
+                        e.append(data[i].stop_time);
 
                     }
+
+                    //alert($("[name='lesson_title']").text());
                     recommend_time();
                 }
             })
@@ -266,11 +357,11 @@
 
 
         let reco_time = $("#recom_time");// 准备输出推荐时间
-        let reco_title = $('<h3 name="reco_title"></h3>').appendTo(reco_time);
+        let reco_title = $('<h4 name="reco_title"></h4>').appendTo(reco_time);
         reco_title.append('可用时间段（默认实验时间为两小时）：');
 
         for(j=0; j<recommend_time.length; j++){
-            let add_item = $('<h3 name="add_item"></h3>').appendTo(reco_time);
+            let add_item = $('<h4 name="add_item"></h4>').appendTo(reco_time);
             //$("[name='add_item']").append(recommend_time[j]);
             add_item.append(recommend_time[j]+',');
             //console.log(recommend_time[j]); //测试用
@@ -314,6 +405,7 @@
             }
             else {
                 if($("[name='lesson_instance']").length === 0){  //当前没有已发布的实验课，不用进一步比较
+                    alert('没有进一步比较');//测试用
                     $('#public_btn').removeAttr("disabled");
                 }
                 else {
@@ -323,9 +415,10 @@
 
                     for(var i=0; i<lessons.length; i++){
                         var lesson_start = new Date($(lessons[i]).find("[name='lesson_start']").text());//当前实验包的开始时间
-                        //console.log(lesson_start.toString());//测试用
+                        console.log(lesson_start.toString());//测试用
                         var lesson_stop = new Date($(lessons[i]).find("[name='lesson_stop']").text());//当前实验包的结束时间
-                        //console.log(lesson_stop.toString()); //测试用
+                        console.log(lesson_stop.toString()); //测试用
+
                         console.log(start.toString());//测试用
                         console.log(stop.toString());//测试用
                         if(lesson_start<start && start<lesson_stop || lesson_start<stop && stop<lesson_stop){
@@ -365,5 +458,6 @@
 
     })
 </script>
-</body>
-</html>
+{% endblock %}
+{#</body>#}
+{#</html>#}

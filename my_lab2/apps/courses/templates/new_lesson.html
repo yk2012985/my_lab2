@@ -1,22 +1,130 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>添加实验课</title>
-</head>
-<body>
-{% include 'base2.html' %}
-<form action="{% url 'course:lesson_add_submit' %}" method="post" autocomplete="off">
-    {% if msg %}<h2>{{ msg }}</h2>{% endif %}
-   <div>
-       <h2>实验课信息</h2>
-       <div class="form-group">
-           {{ lesson_form }}
-       </div>
-   </div>
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <title>添加实验课</title>#}
+{#</head>#}
+{#<body>#}
+{#{% include 'base2.html' %}#}
+{#<form action="{% url 'course:lesson_add_submit' %}" method="post" autocomplete="off">#}
+{#    {% if msg %}<h2>{{ msg }}</h2>{% endif %}#}
+{#   <div>#}
+{#       <h2>实验课信息</h2>#}
+{#       <div class="form-group">#}
+{#           {{ lesson_form }}#}
+{#       </div>#}
+{#   </div>#}
+{#    <input type="hidden" name="lesson_id" value="{{lesson_id|default:'0'}}">#}
+{#    <input class="btn" type="submit" value="添加实验">#}
+{#</form>#}
+{##}
+{#</body>#}
+{#</html>#}
+{% extends 'index_model.html' %}
+{% block custom_title %}添加新实验{% endblock %}
+
+{% block custom_left %}
+    <div id="left-side" class="col-sm-1 col-lg-1" style="display: block; margin-top: 68px; margin-left: 10px;">
+        <ul class="nav nav-pills nav-stacked">
+
+            <li class="h4"><a href="{% url 'Index_common' %}">所 有 实 验</a></li>
+
+            <li class="h4 active"><a href="{% url 'teacher_index' %}">我 的 实 验</a></li>
+
+            <li class="h4"><a href="{% url 'lab_index' %}">实 验 教 室</a></li>
+
+        </ul>
+    </div>
+{% endblock %}
+
+{% block custom_right %}
+    <div id="content_block" class="col-sm-9 col-lg-5 col-lg-push-2 " style="margin-left: 80px;">
+        <form action="{% url 'course:lesson_add_submit' %}" method="post" autocomplete="off">
+           <div>
+               <h2>实验课信息</h2>
+               <div class="form-group">
+                   {{ lesson_form }}
+               </div>
+           </div>
     <input type="hidden" name="lesson_id" value="{{lesson_id|default:'0'}}">
-    <input class="btn" type="submit" value="添加实验">
+    <input class="btn-info" type="submit" value="添加实验">
 </form>
 
-</body>
-</html>
+    </div>
+{% endblock %}
+{% block custom_js %}
+<script>
+    $.ready(
+      $("input").attr({class:"form-control"}),
+        $("select").attr({class:"form-control"}),
+        $("textarea").attr({class:"form-control"})
+
+    );
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
