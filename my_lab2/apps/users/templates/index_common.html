@@ -1,4 +1,19 @@
 {% extends 'index_model.html' %}
+{% block custom_feature %}
+    {% ifequal user_type 'teacher' %}
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href="" data-toggle="dropdown" class="dropdown-toggle">新实验<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% url 'course:lesson_add' %}">创建新实验</a> </li>
+                    <li><a href="{% url 'operation:lesson_public' %}">发布新实验</a> </li>
+                </ul>
+            </li>
+        </ul>
+    {% endifequal %}
+{% endblock %}
+
+
 
 {% block custom_title %}公共课程主页{% endblock %}
 {% block custom_left %}
@@ -7,7 +22,7 @@
 
             <li class="h4 active"><a href="{% url 'Index_common' %}">所 有 实 验</a></li>
 
-            <li class="h4"><a href="{% url 'teacher_index' %}">我 的 实 验</a></li>
+            {% ifequal user_type 'teacher' %}<li class="h4"><a href="{% url 'teacher_index' %}">我 的 实 验</a></li>{% else %}<li class="h4"><a href="{% url 'student_index' %}">我 的 实 验</a></li>{% endifequal %}
 
             <li class="h4"><a href="{% url 'lab_index' %}">实 验 教 室</a></li>
 
@@ -16,7 +31,7 @@
 {% endblock %}
 
 {% block custom_right %}
-    <div id="content_block" class="col-sm-9 col-lg-9 col-lg-push-1" style="margin-left: 16px;">
+    {% ifequal user_type 'teacher' %}<div id="content_block" class="col-sm-9 col-lg-9 col-lg-push-1" style="margin-left: 16px;">
                 <h2 class="page-header text-center">已发布实验课</h2>
                 <ul class="nav nav-tabs" style="margin-bottom: 3px">
                     <li {% ifequal part2 'all'%}class="h4 active" {% else %}class="h4"{% endifequal %}><a href="{% url 'Index_common' %}">全部</a></li>
@@ -64,12 +79,13 @@
                         <tbody>
                             {% for lesson in lessons %}
                                 <tr>
-                                    <td id="lesson_title" class="h3"><a href="{% url 'operation:teacher_lesson_info' lesson.id %}">{{ lesson.lesson.title }}</a></td>
+                                    <td id="lesson_title" class="h3"><a href="{% url 'operation:lesson_info' lesson.id %}">{{ lesson.lesson.title }}</a></td>
                                     <td id="lesson_lab" class="h3">{{ lesson.lab.name }}</td>
                                     <td id="lesson_start" class="h3">{{ lesson.teacher.username }}</td>
                                     <td id="lesson_stop" class="h3">{{ lesson.start_time }}</td>
                                     <td id="lesson_stop" class="h3">{{ lesson.stop_time }}</td>
-
+                                    {% ifequal user_type 'student' %}<td id="lesson_subscribe" class="h4"><button class="btn-info" name="subscribe_button">预约此实验</button></td>{% endifequal %}
+{#                                 <td class="h4">{% if report %}<button class="btn-info" title="report_show">显示报告</button>{% else %} {% endif %}</td>#}
 {#                                    <td class="h3"><a href="{% url 'operation:lesson_delete' lesson.id %}">删除</a></td>#}
 
                                 </tr>
@@ -78,4 +94,287 @@
                     </table>
                 </div>
             </div>
+
+    {% else %}<div id="content_block" class="col-sm-9 col-lg-10  " style="margin-left: 80px;margin-top: 65px">
+        <div class="row">
+            <div id="content_block_left" class="col-lg-5">
+            <h2 id="test_h2">当前已发布未完成实验</h2>
+                <table class="table table-bordered table-striped table-hover">
+                        <thead>
+                           <tr>
+                               <th class="h5 sortable active" scope="col">
+                                   <div class="dropdown">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">实验名称</a>-->
+                                       <h5>实验名称</h5>
+                                   </div>
+                               </th>
+                               <th class="h5 sortable info" scope="col">
+                                   <div class="dropdown">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">实验地点</a>-->
+                                       <h5>实验地点</h5>
+                                   </div>
+                               </th>
+                               <th class="h5 sortable danger" scope="col">
+                                   <div class="dropdown">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">实验教师</a>-->
+                                       <h5>实验教师</h5>
+                                   </div>
+                               </th>
+                               <th class="h5 sortable success" scope="col">
+                                   <div class="dropdown">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">开始时间</a>-->
+                                       <h5>开始时间</h5>
+                                   </div>
+                               </th>
+                               <th class="h5 sortable warning" scope="col">
+                                   <div class="dropdown pull-left">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">结束时间</a>-->
+                                       <h5>结束时间</h5>
+                                   </div>
+                               </th>
+                           </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for lesson in lessons %}
+                                <tr title="lesson_public_instance">
+                                    <td title="lesson_title" class="h5"><a href="{% url 'operation:lesson_info' lesson.id %}">{{ lesson.lesson.title }}</a></td>
+                                    <td title="lesson_lab" class="h5">{{ lesson.lab.name }}</td>
+                                    <td title="lesson_teacher" class="h5">{{ lesson.teacher.username }}</td>
+                                    <input id="lesson_id" name="id" type="hidden" value="{{ lesson.id }}"/>
+                                    <td title="lesson_start" class="h5">{{ lesson.start_time }}</td>
+                                    <td title="lesson_stop" class="h5">{{ lesson.stop_time }}</td>
+                                    {% ifequal user_type 'student' %}<td id="lesson_subscribe" class="h4"><button class="btn-info" name="subscribe_button">预约此实验</button></td>{% endifequal %}
+{#                                 <td class="h4">{% if report %}<button class="btn-info" title="report_show">显示报告</button>{% else %} {% endif %}</td>#}
+{#                                    <td class="h3"><a href="{% url 'operation:lesson_delete' lesson.id %}">删除</a></td>#}
+
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+            </div>
+
+            <div id="content_block_right" class="col-sm-9 col-lg-6 " style="margin-left: 80px;">
+            <div id="recom_time"></div>
+                <div id="test_div">
+                <h2 id="test_h2">当前已预约未完成实验</h2>
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead>
+                           <tr>
+                               <th class="h3 sortable active" scope="col">
+                                   <div class="dropdown">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">实验名称</a>-->
+                                       <h5>实验名称</h5>
+                                   </div>
+                               </th>
+                               <th class="h5 sortable info" scope="col">
+                                   <div class="dropdown">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">实验地点</a>-->
+                                       <h5>实验地点</h5>
+                                   </div>
+                               </th>
+                               <th class="h5 sortable danger" scope="col">
+                                   <div class="dropdown">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">实验教师</a>-->
+                                       <h5>实验教师</h5>
+                                   </div>
+                               </th>
+                               <th class="h5 sortable success" scope="col">
+                                   <div class="dropdown">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">开始时间</a>-->
+                                       <h5>开始时间</h5>
+                                   </div>
+                               </th>
+                               <th class="h5 sortable warning" scope="col">
+                                   <div class="dropdown pull-left">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">结束时间</a>-->
+                                       <h5>结束时间</h5>
+                                   </div>
+                               </th>
+                           </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for lesson_subscribe in lessons_subscribed_all %}
+
+                                <tr title="lesson_subscribed_instance">
+                                    <td title="lesson_title" class="h4"><a href="{% url 'operation:student_lesson_info' lesson_subscribe.lesson.id %}">{{ lesson_subscribe.lesson.lesson.title }}</a></td>
+                                    <td title="lesson_lab" class="h4">{{ lesson_subscribe.lesson.lab.name }}</td>
+                                    <td title="lesson_teacher" class="h4">{{ lesson_subscribe.lesson.teacher.username }}</td>
+                                    <td title="start" class="h4">{{ lesson_subscribe.lesson.start_time }}</td>
+                                    <td title="stop" class="h4">{{ lesson_subscribe.lesson.stop_time }}</td>
+
+{#                                    <td class="h4"><a href="{% url 'operation:lesson_subscribe_delete' lesson_subscribe.id %}">取消预约</a></td>#}
+
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+            </div>
+
+        </div>
+
+        </div>
+
+    </div>
+    {% endifequal %}
+
 {% endblock %}
+{% block custom_js %}
+    <script>
+
+    //实验课预约
+    $("[name='subscribe_button']").click(function () {
+        //点击预约按钮后就开始进行冲突检测
+        $("[title='lesson_subscribed_instance']").css('color','black');//先将所有已预约的实验课实例变成黑色
+        var this_lesson_public_instance = $(this).parent().parent();//拿到当前按钮所在的实验包
+        var conflict_token = false; //冲突标志，默认为假
+        //var lesson_public_id = $(this).parent().find(".lesson_id").text();
+        //console.log(lesson_public_id);//测试用
+        alert('点击了一个预约按钮');//测试用，任何一个预约按钮点击后都可触发此事件，但是需要知道是第几个按钮被点击，因为要向后台传递此按钮所在实验包的id
+        //console.log($(this).parent().find("[title='lesson_start']").text());//测试用，输出点击的预约按钮所在的实验包的实验开始时间
+        var lesson_public_start_text = ($(this).parent().parent().find("[title='lesson_start']").text()).replace(/年/g,"/").replace(/月/g,"/").replace(/日/g,"");
+        //由于页面上现实的是带有汉字的日期格式，必须将其修改成可以转化为Date的形式
+        var lesson_public_start = new Date(lesson_public_start_text);
+        //console.log(lesson_public_start.toString());//测试用
+
+        var lesson_public_stop_text = ($(this).parent().parent().find("[title='lesson_stop']").text()).replace(/年/g,"/").replace(/月/g,"/").replace(/日/g,"");
+        //由于页面上现实的是带有汉字的日期格式，必须将其修改成可以转化为Date的形式
+        var lesson_public_stop = new Date(lesson_public_stop_text);
+        //console.log(lesson_public_stop.toString());//测试用
+        //至此，我们拿到了点击预约按钮所在的实验包的开始，结束时间的Date对象
+
+        var lessons_subscribed_instance = $("[title='lesson_subscribed_instance']");//所有已预约的实验课
+        for(var i=0; i<lessons_subscribed_instance.length; i++){
+            //开始比较吧，别忘了时间格式转换
+            var subscribe_start = new Date($(lessons_subscribed_instance[i]).find("[title='start']").text().replace(/年/g,"/").replace(/月/g,"/").replace(/日/g,""));
+            var subscribe_stop = new Date($(lessons_subscribed_instance[i]).find("[title='stop']").text().replace(/年/g,"/").replace(/月/g,"/").replace(/日/g,""));
+
+            //console.log(subscribe_stop.toString());//测试用
+
+            var subscribe_start_string = subscribe_start.toLocaleDateString();
+            var lesson_public_start_string = lesson_public_start.toLocaleDateString();
+            //console.log(subscribe_start_string);
+            //console.log(subscribe_start);//测试用
+            if(subscribe_start_string === lesson_public_start_string){
+                //预约实验与当前已预约实验在同一天,需进一步比较
+                if(subscribe_start<=lesson_public_start && lesson_public_start<subscribe_stop || subscribe_start<lesson_public_stop && lesson_public_stop<=subscribe_stop) {
+                    //预约实验的开始或结束与当前已预约的实验有冲突，不能预约
+                    conflict_token = true; //将冲突标志设为真
+                    $(lessons_subscribed_instance[i]).css('color', 'red');
+                }
+            }
+        }
+
+        //比较循环结束
+        if(conflict_token === true){
+            alert('与已预约实验课有冲突，无法预约');
+        }
+        else {
+            lesson_subscribe(this_lesson_public_instance.find("#lesson_id"));
+            //console.log(this_lesson_public_instance.find("[title='lesson_title']").text());
+        }
+
+
+
+    });
+
+    //实验预约函数
+    function lesson_subscribe(s) {
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "{% url "operation:lesson_subscribe" %}",
+            data: s.serialize(),
+            success: function (data) {
+                if(data.status === 'success'){
+                    alert('预约成功！');
+                    window.location.reload();
+                }
+                else if(data.status === 'fail'){
+                    alert('操作失败');
+                    window.location.reload();
+                }
+            }
+
+
+    });
+    }
+    </script>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -2,7 +2,7 @@ from django.conf.urls import url
 from .views import LessonPublicView, LessonPublicSubmitView, LessonPublicInfoView, TeacherLessonPublicInfoView,LessonPublicDeleteView\
     , LabLessonsView, LabDatePublicView, LessonSubscribeView, LessonSubscribeDeleteView, ReportResultSaveView\
     ,StudentLessonInfoView,LessonPublicDoneView, LessonPublicUndoneView, LessonPublicPersonalDoneView, LessonPublicPersonalUndoneView\
-    , LabLessondoneView, LabLessonUndoneView
+    ,LessonSubscribePersonalDoneView,LessonSubscribePersonalUndoneView, LabLessondoneView, LabLessonUndoneView
 urlpatterns = [
 
     # 返回所有已完成实验课
@@ -16,6 +16,13 @@ urlpatterns = [
 
     # 返回教师个人所有未完成实验课
     url(r'^lesson/public/personal/undone$', LessonPublicPersonalUndoneView.as_view(), name='lesson_public_personal_undone'),
+
+    # 返回学生个人所有已完成实验课
+    url(r'^lesson/subscribe/personal/done$', LessonSubscribePersonalDoneView.as_view(), name='lesson_subscribe_personal_done'),
+
+    # 返回学生个人所有未完成实验课
+    url(r'^lesson/subscribe/personal/undone$', LessonSubscribePersonalUndoneView.as_view(), name='lesson_subscribe_personal_undone'),
+
 
 
     url(r'^lesson/public', LessonPublicView.as_view(), name='lesson_public'),

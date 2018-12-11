@@ -3,6 +3,7 @@ from django.views.generic.base import View
 from courses.models import LessonResource
 from courses.forms import LessonPublicForm
 from measure.models import Laboratory
+from users.models import UserProfile
 
 from django.urls import reverse
 from .models import LessonPublic, LessonSubscribe, LessonReport
@@ -13,26 +14,42 @@ from datetime import datetime
 
 class LessonPublicDoneView(View):
     """
-    所有已完成实验
+    所有已完成实验（公共首页）
     """
     def get(self, request):
         lesson_public_done = LessonPublic.objects.filter(complete=True)
-        return render(request, 'index_common.html', {
-            'lessons': lesson_public_done,
-            'part2': 'done'
-        })
+        if request.user.type == 'teacher':
+            return render(request, 'index_common.html', {
+                'lessons': lesson_public_done,
+                'part2': 'done',
+                'user_type': 'teacher'
+            })
+        else:
+            return render(request, 'index_common.html', {
+                'lessons': lesson_public_done,
+                'part2': 'done',
+                'user_type': 'student'
+            })
 
 
 class LessonPublicUndoneView(View):
     """
-    所有未完成实验
+    所有未完成实验（公共首页）
     """
     def get(self, request):
         lesson_public_done = LessonPublic.objects.filter(complete=False)
-        return render(request, 'index_common.html', {
-            'lessons': lesson_public_done,
-            'part2': 'undone'
-        })
+        if request.user.type == 'teacher':
+            return render(request, 'index_common.html', {
+                'lessons': lesson_public_done,
+                'part2': 'undone',
+                'user_type': 'teacher'
+            })
+        else:
+            return render(request, 'index_common.html', {
+                'lessons': lesson_public_done,
+                'part2': 'undone',
+                'user_type': 'student'
+            })
 
 class LessonPublicPersonalDoneView(View):
     """
@@ -58,6 +75,34 @@ class LessonPublicPersonalUndoneView(View):
             'part1': 'personal',
             'part2': 'undone'
         })
+
+class LessonSubscribePersonalDoneView(View):
+    """
+    学生个人已完成实验
+    """
+    def get(self, request):
+        lesson_subscribe_done = LessonSubscribe.objects.filter(student=request.user,complete=True)
+        return render(request, 'index_student.html',{
+            'lessons_subscribe_all': lesson_subscribe_done,
+            'part1': 'personal',
+            'part2': 'done'
+        })
+
+
+class LessonSubscribePersonalUndoneView(View):
+    """
+    学生个人未完成实验
+    """
+    def get(self, request):
+        lesson_subscribe_undone = LessonSubscribe.objects.filter(student=request.user,complete=False)
+        return render(request, 'index_student.html',{
+            'lessons_subscribe_all': lesson_subscribe_undone,
+            'part1': 'personal',
+            'part2': 'undone'
+        })
+
+
+
 
 
 class LabLessondoneView(View):
@@ -132,13 +177,13 @@ class LessonPublicSubmitView(View):
 
 class LessonPublicInfoView(View):
     """
-    已发布实验课详情页
+    已发布实验课详情页(公共的，从公共首页访问某课程得到的详情)
     """
     def get(self, request, lesson_id):
         lesson_public = LessonPublic.objects.get(id=lesson_id)
         lesson = lesson_public.lesson
         lesson_resource = LessonResource.objects.filter(lesson=lesson)
-        return render(request, 'lesson_info.html', {
+        return render(request, 'lesson_info_common.html', {
             'lesson_public': lesson_public,
             'lesson_resource': lesson_resource
         })
@@ -169,9 +214,9 @@ class TeacherLessonPublicInfoView(View):
         })
 
 
-class   StudentLessonInfoView(View):
+class StudentLessonInfoView(View):
     """
-    教师已发布实验课详情页
+    学生已预约实验课详情页
     """
     def get(self, request, lesson_id):
         lesson_public = LessonPublic.objects.get(id=lesson_id)

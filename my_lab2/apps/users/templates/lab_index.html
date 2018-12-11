@@ -1,13 +1,29 @@
 {% extends 'index_model.html' %}
 
 {% block custom_title %}实验室信息{% endblock %}
+
+{% block custom_feature %}
+    {% ifequal user_type 'teacher' %}
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href="" data-toggle="dropdown" class="dropdown-toggle">新实验<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% url 'course:lesson_add' %}">创建新实验</a> </li>
+                    <li><a href="{% url 'operation:lesson_public' %}">发布新实验</a> </li>
+                </ul>
+            </li>
+        </ul>
+        {% else %}
+    {% endifequal %}
+{% endblock %}
+
 {% block custom_left %}
     <div id="left-side" class="col-sm-1 col-lg-1" style="display: block; margin-top: 68px; margin-left: 10px;">
         <ul class="nav nav-pills nav-stacked">
 
             <li class="h4"><a href="{% url 'Index_common' %}">所 有 实 验</a></li>
 
-            <li class="h4"><a href="{% url 'teacher_index' %}">我 的 实 验</a></li>
+           {% ifequal user_type 'teacher' %}<li class="h4"><a href="{% url 'teacher_index' %}">我 的 实 验</a></li>{% else %}<li class="h4"><a href="{% url 'student_index' %}">我 的 实 验</a></li>{% endifequal %}
 
             <li class="h4 active"><a href="">实 验 教 室</a></li>
 
@@ -64,7 +80,7 @@
                         <tbody>
                             {% for lesson in lab1_lessons %}
                                 <tr>
-                                    <td id="lesson_title" class="h3"><a href="{% url 'operation:teacher_lesson_info' lesson.id %}">{{ lesson.lesson.title }}</a></td>
+                                    <td id="lesson_title" class="h3"><a href="{% url 'operation:lesson_info' lesson.id %}">{{ lesson.lesson.title }}</a></td>
                                     <td id="lesson_lab" class="h3">{{ lesson.lab.name }}</td>
                                     <td id="lesson_start" class="h3">{{ lesson.teacher.username }}</td>
                                     <td id="lesson_stop" class="h3">{{ lesson.start_time }}</td>

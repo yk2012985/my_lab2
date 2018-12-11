@@ -1,25 +1,4 @@
-{#<!DOCTYPE html>#}
-{#<html lang="en">#}
-{#<head>#}
-{#    <meta charset="UTF-8">#}
-{#    <title>添加实验课</title>#}
-{#</head>#}
-{#<body>#}
-{#{% include 'base2.html' %}#}
-{#<form action="{% url 'course:lesson_add_submit' %}" method="post" autocomplete="off">#}
-{#    {% if msg %}<h2>{{ msg }}</h2>{% endif %}#}
-{#   <div>#}
-{#       <h2>实验课信息</h2>#}
-{#       <div class="form-group">#}
-{#           {{ lesson_form }}#}
-{#       </div>#}
-{#   </div>#}
-{#    <input type="hidden" name="lesson_id" value="{{lesson_id|default:'0'}}">#}
-{#    <input class="btn" type="submit" value="添加实验">#}
-{#</form>#}
-{##}
-{#</body>#}
-{#</html>#}
+
 {% extends 'index_model.html' %}
 {% block custom_title %}添加新实验{% endblock %}
 

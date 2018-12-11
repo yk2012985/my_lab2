@@ -1,6 +1,19 @@
 {% extends 'index_model.html' %}
 
 {% block custom_title %}教师主页{% endblock %}
+
+{% block custom_feature %}
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href="" data-toggle="dropdown" class="dropdown-toggle">新实验<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% url 'course:lesson_add' %}">创建新实验</a> </li>
+                    <li><a href="{% url 'operation:lesson_public' %}">发布新实验</a> </li>
+                </ul>
+            </li>
+        </ul>
+{% endblock %}
+
 {% block custom_left %}
     <div id="left-side" class="col-sm-1 col-lg-1" style="display: block; margin-top: 68px; margin-left: 10px;">
         <ul class="nav nav-pills nav-stacked">

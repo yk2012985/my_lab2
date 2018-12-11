@@ -40,15 +40,9 @@
             </li>
         </ul>
 
-        <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
-                <a href="" data-toggle="dropdown" class="dropdown-toggle">新实验<span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="{% url 'course:lesson_add' %}">创建新实验</a> </li>
-                    <li><a href="{% url 'operation:lesson_public' %}">发布新实验</a> </li>
-                </ul>
-            </li>
-        </ul>
+    {% block custom_feature %}
+
+    {% endblock %}
     </div>
 
 <!--接下来的内容整体下移，不要和顶部导航栏重合-->

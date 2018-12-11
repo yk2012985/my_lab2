@@ -70,11 +70,25 @@ class IndexCommonView(View):
     公共首页,默认选择全部实验课
     """
     def get(self, request):
-        lesson_public_all = LessonPublic.objects.all()
-        return render(request, 'index_common.html', {
-            'lessons': lesson_public_all,
-            'part2': 'all'
-        })
+
+
+        lesson_subscribe_all = LessonSubscribe.objects.filter(student=request.user,complete=False)
+        if request.user.type == 'teacher':
+            lesson_public_all = LessonPublic.objects.all()
+            return render(request, 'index_common.html', {
+                'lessons': lesson_public_all,
+                'part2': 'all',
+                'user_type':'teacher'
+            })
+        else:
+            lesson_public_all = LessonPublic.objects.filter(complete=False)
+            return render(request, 'index_common.html', {
+                'lessons': lesson_public_all,
+                'lessons_subscribed_all': lesson_subscribe_all,
+                'part2': 'all',
+                'user_type': 'student'
+
+            })
 
 
 class LabIndexView(View):
@@ -86,11 +100,21 @@ class LabIndexView(View):
         lab2 = Laboratory.objects.get(id=2)
         lab1_lesson = LessonPublic.objects.filter(lab=lab1)
         lab2_lesson = LessonPublic.objects.filter(lab=lab2)
-        return render(request, 'lab_index.html', {
-            'lab1_lessons': lab1_lesson,
-            'lab2_lessons': lab2_lesson,
-            'part2': 'all'
-        })
+        if(request.user.type == 'teacher'):
+            return render(request, 'lab_index.html', {
+                'lab1_lessons': lab1_lesson,
+                'lab2_lessons': lab2_lesson,
+                'part2': 'all',
+                'user_type': 'teacher'
+            })
+        else:
+            return render(request, 'lab_index.html', {
+                'lab1_lessons': lab1_lesson,
+                'lab2_lessons': lab2_lesson,
+                'part2': 'all',
+                'user_type': 'student'
+            })
+
 
 
 class TeacherIndexView(View):
@@ -129,14 +153,15 @@ class StudentIndexView(View):
         if request.user.type == 'student':
             name = request.user.username
             # teacher = UserProfile.objects.get(user=request.user)
-            lessons_public_all = LessonPublic.objects.all() # 全部已发布的实验课
+            #lessons_public_all = LessonPublic.objects.all() # 全部已发布的实验课
             lessons_subscribe_all = LessonSubscribe.objects.filter(student=request.user) # 全部已预约的实验课
             lessons = []  # 用于装已预约的LessonPublic
             for lesson in lessons_subscribe_all:
                 lessons.append(lesson.lesson) # 注意lesson_subscribe中的lesson对应的是LessonPublic
-            return render(request, 'student_index.html', {
+            return render(request, 'index_student.html', {
                 'lessons_subscribe_all': lessons_subscribe_all,
-                'lessons_public_all': lessons_public_all
+                'part1': 'all',
+                'part2': 'all'
             })
         else:
             logout(request)
