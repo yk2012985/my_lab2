@@ -23,16 +23,33 @@ class Laboratory(models.Model):
             return self.name
 
 
+class Desk(models.Model):
+    number = models.CharField(max_length=20, verbose_name="实验台编号")
+    lab = models.ForeignKey(Laboratory, on_delete=models.CASCADE, verbose_name="所属实验室")
+    row = models.IntegerField(blank=True, null=True, verbose_name="横排")
+    column = models.IntegerField(blank=True, null=True, verbose_name="竖排")
+    available = models.BooleanField(default=True, verbose_name="是否可用")
+    add_time = models.DateTimeField(default=datetime.now, verbose_name="购买时间")
+
+    class Meta:
+        verbose_name = "实验台"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.number
+
+
 class Device(models.Model):
     """
     实验仪器
     """
     name = models.CharField(max_length=20, verbose_name="仪器名称")
     kind = models.CharField(max_length=10, verbose_name='仪器属性')
-    laboratory = models.ForeignKey(Laboratory, on_delete=models.CASCADE, verbose_name="信号源所属的实验室")
+    laboratory = models.ForeignKey(Desk, on_delete=models.CASCADE, verbose_name="所属实验台")
     brand = models.CharField(default='Tektronix', max_length=10, verbose_name='品牌')
     add_time = models.DateTimeField(default=datetime.now, verbose_name="购买时间")
     detail = models.TextField(default='123', verbose_name='仪器说明')
+    available = models.BooleanField(default=True, verbose_name="是否可用")
 
     class Meta:
         verbose_name = "仪器名称"

@@ -32,7 +32,7 @@
 
 
 {% block custom_right %}
-    <div id="content_block" class="col-sm-9 col-lg-10  " style="margin-left: 80px;margin-top: 65px">
+    <div id="content_block" class="col-sm-9 col-lg-10  " style=" margin-left: 80px;margin-top: 65px">
         <h2 class="page-header text-center   ">{{ lesson_public.lesson.title }}</h2>
         <div><h4>{{ lesson_public.lab.name }} {{ lesson_public.teacher.username }} 开始时间：{{ lesson_public.start_time }} </h4></div>
 {#        <div><h4><a href="{{ MEDIA_URL }}{{ lesson.template }}" download="">实验报告模板下载</a></h4></div>#}
@@ -48,7 +48,57 @@
             </div>
 
              <div id="content_block_right" class="col-sm-9 col-lg-7  " style="margin-left: 60px;">
+                <table class="table table-bordered table-striped table-hover">
+                        <thead>
+                           <tr>
+                               <th class="h3 sortable active" scope="col">
+                                   <div class="dropdown">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">实验名称</a>-->
+                                       <h5>实验名称</h5>
+                                   </div>
+                               </th>
+                               <th class="h3 sortable info" scope="col">
+                                   <div class="dropdown">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">实验地点</a>-->
+                                       <h5>实验地点</h5>
+                                   </div>
+                               </th>
+                               <th class="h3 sortable danger" scope="col">
+                                   <div class="dropdown">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">实验教师</a>-->
+                                       <h5>实验教师</h5>
+                                   </div>
+                               </th>
+                               <th class="h3 sortable success" scope="col">
+                                   <div class="dropdown">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">开始时间</a>-->
+                                       <h5>开始时间</h5>
+                                   </div>
+                               </th>
+                               <th class="h3 sortable warning" scope="col">
+                                   <div class="dropdown pull-left">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">结束时间</a>-->
+                                       <h5>结束时间</h5>
+                                   </div>
+                               </th>
+                           </tr>
+                        </thead>
 
+                        <tbody>
+                            {% for lesson_subscribe in lessons_subscribe_all %}
+                                <tr>
+                                    <td id="lesson_title" class="h3"><a href="{% url 'operation:student_lesson_info' lesson_subscribe.lesson.id %}">{{ lesson_subscribe.lesson.lesson.title }}</a></td>
+                                    <td id="lesson_lab" class="h3">{{ lesson_subscribe.lesson.lab.name }}</td>
+                                    <td id="lesson_start" class="h3">{{ lesson_subscribe.lesson.teacher.username }}</td>
+                                    <td id="lesson_stop" class="h3">{{ lesson_subscribe.lesson.start_time }}</td>
+                                    <td id="lesson_stop" class="h3">{{ lesson_subscribe.lesson.stop_time }}</td>
+
+                                    <td class="h3"><a href="{% url 'operation:lesson_subscribe_delete' lesson_subscribe.id %}">取消预约</a></td>
+
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
 
 
                  <div id="resource_pdf">

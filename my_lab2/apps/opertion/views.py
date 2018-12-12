@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic.base import View
 from courses.models import LessonResource
 from courses.forms import LessonPublicForm
-from measure.models import Laboratory
+from measure.models import Laboratory, Desk
 from users.models import UserProfile
 
 from django.urls import reverse
@@ -332,6 +332,18 @@ class LabDatePublicView(View):
             test_data = json.dumps(lesson_public_list)
             print(test_data)
             return HttpResponse(test_data , content_type='application/json')
+
+
+class LabDeskSheetView(View):
+    """
+    展示实验台页面
+    """
+    def get(self, request, lab_id):
+        lab = Laboratory.objects.get(id=lab_id)
+        desks = Desk.objects.filter(lab=lab)
+        return render(request, 'lab_desk_sheet.html', {
+            'desks': desks
+        })
 
 
 class LessonSubscribeView(View):

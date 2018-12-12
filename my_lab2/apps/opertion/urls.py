@@ -2,7 +2,7 @@ from django.conf.urls import url
 from .views import LessonPublicView, LessonPublicSubmitView, LessonPublicInfoView, TeacherLessonPublicInfoView,LessonPublicDeleteView\
     , LabLessonsView, LabDatePublicView, LessonSubscribeView, LessonSubscribeDeleteView, ReportResultSaveView\
     ,StudentLessonInfoView,LessonPublicDoneView, LessonPublicUndoneView, LessonPublicPersonalDoneView, LessonPublicPersonalUndoneView\
-    ,LessonSubscribePersonalDoneView,LessonSubscribePersonalUndoneView, LabLessondoneView, LabLessonUndoneView
+    ,LessonSubscribePersonalDoneView,LessonSubscribePersonalUndoneView, LabLessondoneView, LabLessonUndoneView, LabDeskSheetView
 urlpatterns = [
 
     # 返回所有已完成实验课
@@ -57,6 +57,9 @@ urlpatterns = [
     #url(r'^input_test/(?P<lab_id>\d+)$', InputTestView.as_view(), name="input_test"),
 
     url(r'^lab_date_public/(?P<lab_id>\d+)$', LabDatePublicView.as_view(), name='lab_date_public'),
+
+    # 展示实验台页面
+    url(r'^lab_desk_sheet/(?P<lab_id>\d+)$', LabDeskSheetView .as_view(), name='lab_desk_sheet'),
 
     # 学生预约实验
     url(r'^lesson_subscribe$', LessonSubscribeView.as_view(), name='lesson_subscribe'),

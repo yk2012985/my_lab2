@@ -84,7 +84,7 @@
                                     <td id="lesson_start" class="h3">{{ lesson.teacher.username }}</td>
                                     <td id="lesson_stop" class="h3">{{ lesson.start_time }}</td>
                                     <td id="lesson_stop" class="h3">{{ lesson.stop_time }}</td>
-                                    {% ifequal user_type 'student' %}<td id="lesson_subscribe" class="h4"><button class="btn-info" name="subscribe_button">预约此实验</button></td>{% endifequal %}
+                                    {% ifequal user_type 'student' %}<td id="lesson_subscribe" class="h5"><button class="btn-info" name="subscribe_button">预约</button></td>{% endifequal %}
 {#                                 <td class="h4">{% if report %}<button class="btn-info" title="report_show">显示报告</button>{% else %} {% endif %}</td>#}
 {#                                    <td class="h3"><a href="{% url 'operation:lesson_delete' lesson.id %}">删除</a></td>#}
 
@@ -144,7 +144,7 @@
                                     <input id="lesson_id" name="id" type="hidden" value="{{ lesson.id }}"/>
                                     <td title="lesson_start" class="h5">{{ lesson.start_time }}</td>
                                     <td title="lesson_stop" class="h5">{{ lesson.stop_time }}</td>
-                                    {% ifequal user_type 'student' %}<td id="lesson_subscribe" class="h4"><button class="btn-info" name="subscribe_button">预约此实验</button></td>{% endifequal %}
+                                    {% ifequal user_type 'student' %}<td id="lesson_subscribe" class="h5"><button class="btn-info" name="subscribe_button">预约</button></td>{% endifequal %}
 {#                                 <td class="h4">{% if report %}<button class="btn-info" title="report_show">显示报告</button>{% else %} {% endif %}</td>#}
 {#                                    <td class="h3"><a href="{% url 'operation:lesson_delete' lesson.id %}">删除</a></td>#}
 

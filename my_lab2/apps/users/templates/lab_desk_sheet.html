@@ -1,0 +1,86 @@
+{% extends 'index_model.html' %}
+{% block custom_title %}实验台选择{% endblock %}
+{% block custom_left %}
+    <div id="left-side" class="col-sm-1 col-lg-1" style="display: block; margin-top: 68px; margin-left: 10px;">
+        <ul class="nav nav-pills nav-stacked">
+
+            <li class="h4"><a href="{% url 'Index_common' %}">所 有 实 验</a></li>
+
+            <li class="h4 active"><a href="{% url 'student_index' %}">我 的 实 验</a></li>
+
+            <li class="h4"><a href="{% url 'lab_index' %}">实 验 教 室</a></li>
+
+        </ul>
+    </div>
+{% endblock %}
+
+{% block custom_right %}
+     <table class="table table-hover">
+                        <tbody>
+                            {% for desk in desks %}
+                                <tr>
+                                    {% ifequal desk.row '1'  %}
+                                        
+                                    {% endifequal %}
+                                    <td id="lesson_title" class="h3"><a href="{% url 'operation:student_lesson_info' lesson_subscribe.lesson.id %}">{{ lesson_subscribe.lesson.lesson.title }}</a></td>
+                                    <td id="lesson_lab" class="h3">{{ lesson_subscribe.lesson.lab.name }}</td>
+                                    <td id="lesson_start" class="h3">{{ lesson_subscribe.lesson.teacher.username }}</td>
+                                    <td id="lesson_stop" class="h3">{{ lesson_subscribe.lesson.start_time }}</td>
+                                    <td id="lesson_stop" class="h3">{{ lesson_subscribe.lesson.stop_time }}</td>
+
+                                    <td class="h3"><a href="{% url 'operation:lesson_subscribe_delete' lesson_subscribe.id %}">取消预约</a></td>
+
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
