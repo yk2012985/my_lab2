@@ -9,32 +9,47 @@
             <li class="h4 active"><a href="{% url 'student_index' %}">我 的 实 验</a></li>
 
             <li class="h4"><a href="{% url 'lab_index' %}">实 验 教 室</a></li>
-
+            <li class="h4 hidden">{{ lesson_id }}</li>
         </ul>
     </div>
 {% endblock %}
 
 {% block custom_right %}
-     <table class="table table-hover">
+     <table class="col-lg-8 table table-hover">
                         <tbody>
-                            {% for desk in desks %}
                                 <tr>
-                                    {% ifequal desk.row '1'  %}
-                                        
-                                    {% endifequal %}
-                                    <td id="lesson_title" class="h3"><a href="{% url 'operation:student_lesson_info' lesson_subscribe.lesson.id %}">{{ lesson_subscribe.lesson.lesson.title }}</a></td>
-                                    <td id="lesson_lab" class="h3">{{ lesson_subscribe.lesson.lab.name }}</td>
-                                    <td id="lesson_start" class="h3">{{ lesson_subscribe.lesson.teacher.username }}</td>
-                                    <td id="lesson_stop" class="h3">{{ lesson_subscribe.lesson.start_time }}</td>
-                                    <td id="lesson_stop" class="h3">{{ lesson_subscribe.lesson.stop_time }}</td>
-
-                                    <td class="h3"><a href="{% url 'operation:lesson_subscribe_delete' lesson_subscribe.id %}">取消预约</a></td>
-
+                                    {% for desk in lab_desk_1 %}
+                                        <td  class="h3"><a href="{% url 'operation:lesson_subscribe' lesson_id desk.id %}">{{ desk.number }}</a></td>
+                                    {% endfor %}
                                 </tr>
-                            {% endfor %}
+                                <tr>
+                                    {% for desk in lab_desk_2 %}
+                                        <td  class="h3"><a href="{% url 'operation:lesson_subscribe' lesson_id desk.id %}">{{ desk.number }}</a></td>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                    {% for desk in lab_desk_3 %}
+                                        <td  class="h3"><a href="{% url 'operation:lesson_subscribe' lesson_id desk.id %}">{{ desk.number }}</a></td>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                    {% for desk in lab_desk_4 %}
+                                        <td  class="h3"><a href="{% url 'operation:lesson_subscribe' lesson_id desk.id %}">{{ desk.number }}</a></td>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                    {% for desk in lab_desk_5 %}
+                                        <td  class="h3"><a href="{% url 'operation:lesson_subscribe' lesson_id desk.id %}">{{ desk.number }}</a></td>
+                                    {% endfor %}
+                                </tr>
+
                         </tbody>
                     </table>
 
+
+{% endblock %}
+
+{% block custom_js %}
 
 {% endblock %}
 

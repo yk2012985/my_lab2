@@ -2,7 +2,8 @@ from django.conf.urls import url
 from .views import LessonPublicView, LessonPublicSubmitView, LessonPublicInfoView, TeacherLessonPublicInfoView,LessonPublicDeleteView\
     , LabLessonsView, LabDatePublicView, LessonSubscribeView, LessonSubscribeDeleteView, ReportResultSaveView\
     ,StudentLessonInfoView,LessonPublicDoneView, LessonPublicUndoneView, LessonPublicPersonalDoneView, LessonPublicPersonalUndoneView\
-    ,LessonSubscribePersonalDoneView,LessonSubscribePersonalUndoneView, LabLessondoneView, LabLessonUndoneView, LabDeskSheetView
+    ,LessonSubscribePersonalDoneView,LessonSubscribePersonalUndoneView, LabLessondoneView, LabLessonUndoneView, LabDeskSheetView\
+    ,LabDeskCheckView
 urlpatterns = [
 
     # 返回所有已完成实验课
@@ -58,11 +59,14 @@ urlpatterns = [
 
     url(r'^lab_date_public/(?P<lab_id>\d+)$', LabDatePublicView.as_view(), name='lab_date_public'),
 
+    # 查看实验室有无满员情况
+    url(r'^lab_desk_check/$', LabDeskCheckView.as_view(), name='lab_desk_check'),
+
     # 展示实验台页面
-    url(r'^lab_desk_sheet/(?P<lab_id>\d+)$', LabDeskSheetView .as_view(), name='lab_desk_sheet'),
+    url(r'^lab_desk_sheet/(?P<lesson_id>\d+)$', LabDeskSheetView.as_view(), name='lab_desk_sheet'),
 
     # 学生预约实验
-    url(r'^lesson_subscribe$', LessonSubscribeView.as_view(), name='lesson_subscribe'),
+    url(r'^lesson_subscribe/(?P<lesson_id>\d+)/(?P<desk_id>\d+)$', LessonSubscribeView.as_view(), name='lesson_subscribe'),
 
     # 学生预约实验删除
     url(r'^lesson_subscribe_delete/(?P<lesson_subscribe_id>\d+)$', LessonSubscribeDeleteView.as_view(), name='lesson_subscribe_delete'),

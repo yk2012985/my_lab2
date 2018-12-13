@@ -334,36 +334,104 @@ class LabDatePublicView(View):
             return HttpResponse(test_data , content_type='application/json')
 
 
+class LabDeskCheckView(View):
+    """
+    检查实验室有无满员
+    """
+    def get(self, request):
+        return render(request, "login2.html")
+    def post(self, request):
+        lesson_id = request.POST.get("id",'4') # 这里接到的是lesson_public的id
+        lesson_public = LessonPublic.objects.get(id=lesson_id)
+        lab = lesson_public.lab
+        lab_desks_all = Desk.objects.filter(lab=lab, available=True) # 该实验所在实验室所有可用的实验台
+
+        if lab_desks_all.count() == 0: # 如果可用实验台为0，则返回实验室已满员，无法预约
+            return HttpResponse('{"status":"fail"}', content_type='application/json')
+        else:
+            return HttpResponse('{"status":"success"}', content_type='application/json')
+
+
 class LabDeskSheetView(View):
     """
     展示实验台页面
     """
-    def get(self, request, lab_id):
-        lab = Laboratory.objects.get(id=lab_id)
-        desks = Desk.objects.filter(lab=lab)
-        return render(request, 'lab_desk_sheet.html', {
-            'desks': desks
+    def get(self, request, lesson_id): # 这里接到的是lesson_public的id
+        lesson_public = LessonPublic.objects.get(id=lesson_id)
+        lab = lesson_public.lab
+        lab_desks_all = Desk.objects.filter(lab=lab, available=True)  # 该实验所在实验室所有可用的实验台
+        lab_desks_all_list = []  # 建立一个容器来装全部的实验台，便于剔除
+        for desk in lab_desks_all:
+            lab_desks_all_list.append(desk)
+
+        lab_desks_1 = []
+        lab_desks_2 = []
+        lab_desks_3 = []
+        lab_desks_4 = []
+        lab_desks_5 = []
+
+        lesson_subscribes = LessonSubscribe.objects.filter(lesson=lesson_public)  # 拿到该实验目前的全部预约
+        subscribed_desks = []  # 定义一个空的列表，用于装已预约出去的实验台
+        for subscribe in lesson_subscribes:
+            subscribed_desks.append(subscribe.desk)  # 将所有预约出去的试验台装进去
+
+        for desk in lab_desks_all_list:  # 从lab_desks_all_list中剔除掉所有已预约的实验台
+            if desk in subscribed_desks:
+                lab_desks_all_list.remove(desk)
+
+        # 在剔除已预约实验台后的所有实验台中进行分类
+        for desk in lab_desks_all_list:
+            if desk.row == 1:
+                lab_desks_1.append(desk)
+                #lab_desks_all_list.remove(desk)
+            elif desk.row == 2:
+                lab_desks_2.append(desk)
+                #lab_desks_all_list.remove(desk)
+            elif desk.row == 3:
+                lab_desks_3.append(desk)
+                #lab_desks_all_list.remove(desk)
+            elif desk.row == 4:
+                lab_desks_4.append(desk)
+                #lab_desks_all_list.remove(desk)
+            else:
+                lab_desks_5.append(desk)
+                #lab_desks_all_list.remove(desk)
+        return render(request, 'lab_desk_sheet.html', {  # 将分好类的实验台传到前端页面
+            'lab_desk_1': lab_desks_1,
+            'lab_desk_2': lab_desks_2,
+            'lab_desk_3': lab_desks_3,
+            'lab_desk_4': lab_desks_4,
+            'lab_desk_5': lab_desks_5,
+            'lesson_id': lesson_id
         })
+
 
 
 class LessonSubscribeView(View):
     """
     学生预约实验
     """
-    def get(self, request):
-        return render(request, "login2.html")
-
-    def post(self, request):
-        lesson_public_id = request.POST.get("id") # 传过来的是预约课程的id
-        try:
-            lesson_public = LessonPublic.objects.get(id=lesson_public_id)
-        except:
-            return HttpResponse('{"status":"fail"}', content_type='application/json')
+    def get(self, request, lesson_id, desk_id):
+        lesson_public = LessonPublic.objects.get(id=lesson_id)
         lesson_subscribe = LessonSubscribe()
         lesson_subscribe.student = request.user
         lesson_subscribe.lesson = lesson_public
+        desk = Desk.objects.get(id=desk_id)
+        lesson_subscribe.desk = desk
         lesson_subscribe.save()
-        return HttpResponse('{"status":"success"}', content_type='application/json')
+        return HttpResponseRedirect(reverse('student_index'))
+
+    # def post(self, request):
+    #     lesson_public_id = request.POST.get("id") # 传过来的是预约课程的id
+    #     try:
+    #         lesson_public = LessonPublic.objects.get(id=lesson_public_id)
+    #     except:
+    #         return HttpResponse('{"status":"fail"}', content_type='application/json')
+    #     lesson_subscribe = LessonSubscribe()
+    #     lesson_subscribe.student = request.user
+    #     lesson_subscribe.lesson = lesson_public
+    #     lesson_subscribe.save()
+    #     return HttpResponse('{"status":"success"}', content_type='application/json')
 
 
 

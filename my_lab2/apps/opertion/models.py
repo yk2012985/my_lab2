@@ -1,7 +1,7 @@
 from django.db import models
 from courses.models import Lesson
 from users.models import UserProfile
-from measure.models import Laboratory
+from measure.models import Laboratory, Desk
 from datetime import datetime
 # Create your models here.
 
@@ -24,6 +24,7 @@ class LessonPublic(models.Model):
 class LessonSubscribe(models.Model):
     student = models.ForeignKey(UserProfile, null=True, blank=True, verbose_name="实验学生")
     lesson = models.ForeignKey(LessonPublic, null=True, blank=True, verbose_name="预约实验") # 对应已发布的实验课
+    desk = models.ForeignKey(Desk, null=True,blank=True, verbose_name="预约实验台") # 对应预约实验的实验室的实验台
     grade = models.IntegerField(default=0, verbose_name="实验分数")
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
     complete = models.BooleanField(default=False, verbose_name="是否完成")

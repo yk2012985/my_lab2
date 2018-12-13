@@ -144,8 +144,9 @@
                                     <input id="lesson_id" name="id" type="hidden" value="{{ lesson.id }}"/>
                                     <td title="lesson_start" class="h5">{{ lesson.start_time }}</td>
                                     <td title="lesson_stop" class="h5">{{ lesson.stop_time }}</td>
+{#                                    {% ifequal user_type 'student' %}<td id="lesson_subscribe" class="h5"><a href="{% url 'operation:lab_desk_sheet' lesson.id %}"><button class="btn-info" name="subscribe_button">预约</button></a></td>{% endifequal %}#}
                                     {% ifequal user_type 'student' %}<td id="lesson_subscribe" class="h5"><button class="btn-info" name="subscribe_button">预约</button></td>{% endifequal %}
-{#                                 <td class="h4">{% if report %}<button class="btn-info" title="report_show">显示报告</button>{% else %} {% endif %}</td>#}
+                                    <td title="desk_select" class="h5 hidden"><a href="{% url 'operation:lab_desk_sheet' lesson.id %}"><button class="btn-warning" title="report_show">选择试验台</button></a> </td>
 {#                                    <td class="h3"><a href="{% url 'operation:lesson_delete' lesson.id %}">删除</a></td>#}
 
                                 </tr>
@@ -224,11 +225,12 @@
     <script>
 
     //实验课预约
-    $("[name='subscribe_button']").click(function () {
+    $("[name='subscribe_button']").click(function (e) {
         //点击预约按钮后就开始进行冲突检测
         $("[title='lesson_subscribed_instance']").css('color','black');//先将所有已预约的实验课实例变成黑色
         var this_lesson_public_instance = $(this).parent().parent();//拿到当前按钮所在的实验包
         var conflict_token = false; //冲突标志，默认为假
+        //e.preventDefault();
         //var lesson_public_id = $(this).parent().find(".lesson_id").text();
         //console.log(lesson_public_id);//测试用
         alert('点击了一个预约按钮');//测试用，任何一个预约按钮点击后都可触发此事件，但是需要知道是第几个按钮被点击，因为要向后台传递此按钮所在实验包的id
@@ -236,7 +238,7 @@
         var lesson_public_start_text = ($(this).parent().parent().find("[title='lesson_start']").text()).replace(/年/g,"/").replace(/月/g,"/").replace(/日/g,"");
         //由于页面上现实的是带有汉字的日期格式，必须将其修改成可以转化为Date的形式
         var lesson_public_start = new Date(lesson_public_start_text);
-        //console.log(lesson_public_start.toString());//测试用
+        console.log(lesson_public_start.toString());//测试用
 
         var lesson_public_stop_text = ($(this).parent().parent().find("[title='lesson_stop']").text()).replace(/年/g,"/").replace(/月/g,"/").replace(/日/g,"");
         //由于页面上现实的是带有汉字的日期格式，必须将其修改成可以转化为Date的形式
@@ -269,22 +271,45 @@
         //比较循环结束
         if(conflict_token === true){
             alert('与已预约实验课有冲突，无法预约');
+            //return false;
+            //e.preventDefault();
         }
         else {
-            lesson_subscribe(this_lesson_public_instance.find("#lesson_id"));
+            //lesson_subscribe(this_lesson_public_instance.find("#lesson_id"));
+            lab_desk_check(this_lesson_public_instance.find("#lesson_id"));
             //console.log(this_lesson_public_instance.find("[title='lesson_title']").text());
+            console.log('进行到实验台跳转函数');
+
         }
 
 
 
     });
 
+    //检查实验室是否满员
+    function lab_desk_check(m) {
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "{% url "operation:lab_desk_check" %}",
+            data: m.serialize(),
+            success: function (data) {
+                if(data.status === 'fail'){
+                    alert('实验室预约已满，无法预约')
+                }
+                else {
+                    m.parent().find("[title='desk_select']").attr('class', 'h5')
+                }
+            }
+        })
+    }
+
     //实验预约函数
     function lesson_subscribe(s) {
         $.ajax({
             cache: false,
             type: "POST",
-            url: "{% url "operation:lesson_subscribe" %}",
+            url: "",
             data: s.serialize(),
             success: function (data) {
                 if(data.status === 'success'){

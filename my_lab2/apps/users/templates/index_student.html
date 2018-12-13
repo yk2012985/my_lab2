@@ -40,6 +40,12 @@
                                        <h5>实验地点</h5>
                                    </div>
                                </th>
+                               <th class="h3 sortable info" scope="col">
+                                   <div class="dropdown">
+                                       <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">实验地点</a>-->
+                                       <h5>实验台</h5>
+                                   </div>
+                               </th>
                                <th class="h3 sortable danger" scope="col">
                                    <div class="dropdown">
                                        <!--<a class="dropdown-toggle" data-toggle="dropdown" href="">实验教师</a>-->
@@ -66,6 +72,7 @@
                                 <tr>
                                     <td id="lesson_title" class="h3"><a href="{% url 'operation:student_lesson_info' lesson_subscribe.lesson.id %}">{{ lesson_subscribe.lesson.lesson.title }}</a></td>
                                     <td id="lesson_lab" class="h3">{{ lesson_subscribe.lesson.lab.name }}</td>
+                                    <td id="lesson_desk" class="h3">{{ lesson_subscribe.desk.number }}</td>
                                     <td id="lesson_start" class="h3">{{ lesson_subscribe.lesson.teacher.username }}</td>
                                     <td id="lesson_stop" class="h3">{{ lesson_subscribe.lesson.start_time }}</td>
                                     <td id="lesson_stop" class="h3">{{ lesson_subscribe.lesson.stop_time }}</td>
@@ -145,7 +152,7 @@
         $.ajax({
             cache: false,
             type: "POST",
-            url: "{% url "operation:lesson_subscribe" %}",
+            url: "",
             data: s.serialize(),
             success: function (data) {
                 if(data.status === 'success'){
